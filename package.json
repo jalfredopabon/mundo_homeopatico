@@ -1,0 +1,1 @@
+{\n  "name": "mundo_homeopatico",\n  "version": "1.0.0",\n  "private": true,\n  "devDependencies": {\n    "eslint": "^8.0.0",\n    "prettier": "^2.0.0",\n    "stylelint": "^14.0.0",\n    "htmlhint": "^1.0.0"\n  }\n}
