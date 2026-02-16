@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mundo Homeopático | Catálogo Senior 2026</title>
+    <title>Mundo Homeopático | Lista de precios</title>
     <meta name="keywords"
         content="homeopatia, homeopatía, productos hoemopáticos, comprar homeopatia medellin, precios medicamentos naturales colombia, distribuidor esencias florales latinoamerica, farmacia homeopatica certificada">
     <meta name="author" content="Mundo Homeopático">
@@ -60,7 +60,7 @@
       "image": "https://mundohomeopatico.com/img/logo-mundo-homeopatico.webp",
       "@id": "https://mundohomeopatico.com",
       "url": "https://mundohomeopatico.com",
-      "telephone": "+573176680750",
+      "telephone": "+573176687050",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Carrera 49 # 64-06", 
@@ -82,7 +82,7 @@
       },
       "sameAs": [
         "https://www.instagram.com/mundohomeopatico",
-        "https://wa.me/573176680750"
+        "https://wa.me/573176687050"
       ]
     }
     </script>
@@ -145,8 +145,8 @@
     </script>
 
     <!-- Fuentes Google Optimizadas con display=swap -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600;700;800&family=DM+Serif+Display:wght@400&display=swap"
+    <!-- TAREA FINAL: FULL INTER (Monotipografía Premium) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
 
     <!-- Iconos Lucide (Carga Diferida para no bloquear renderizado) -->
@@ -221,17 +221,17 @@
             /* Alias para compatibilidad con botones "+" */
 
             /* Colores secundarios */
-            --secondary: hsl(210, 50%, 20%);
-            /* Azul marino oscuro - títulos */
+            --secondary: #1a1a1a;
+            /* Gris Antracita Premium (Adiós al azul) */
             --secondary-light: hsl(40, 20%, 94%);
             /* Beige claro - fondos suaves */
 
             /* Texto */
-            --foreground: hsl(210, 50%, 20%);
-            /* Texto principal (azul marino) */
-            --text-body: hsl(210, 20%, 45%);
-            /* Texto cuerpo (gris azulado) */
-            --text-muted: hsl(210, 15%, 55%);
+            --foreground: #1a1a1a;
+            /* Texto principal (#1a1a1a vs #000) */
+            --text-body: #374151;
+            /* Texto cuerpo (Gris suave optimizado lectura) */
+            --text-muted: #6b7280;
             /* Texto secundario */
 
             /* Accent - Verde natural */
@@ -300,14 +300,17 @@
             --space-xxl: 4rem;
             /* 64px */
 
-            /* SISTEMA TIPOGRÁFICO (V0 Design: DM Serif + DM Sans) */
-            --font-serif: 'DM Serif Display', serif;
-            --font-sans: 'Karla', sans-serif;
-            /* Humanista, orgánica, mejor legibilidad */
+            /* SISTEMA TIPOGRÁFICO (V0 Design: FULL INTER) */
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: var(--font-sans);
+            /* Override: Eliminamos Serif del sistema */
+            --font-heading: var(--font-sans);
+            /* Títulos usan Inter */
+            --font-display: var(--font-sans);
+            /* Display usa Inter */
 
-            --font-serif: 'DM Serif Display', serif;
-            --font-sans: 'Karla', sans-serif;
-            /* Humanista, orgánica, mejor legibilidad */
+            /* Alineación Numérica (Tabular Nums) para Precios */
+            --font-nums: 'Inter', sans-serif;
 
             /* --- UNIFIED SIDEBAR SYSTEM (FIGMA SPEC v1) --- */
             --sidebar-padding-x: 1.5rem;
@@ -326,11 +329,8 @@
             /* Igual que altura de fila para cuadrar iconos */
 
             /* Aplicación semántica */
-            --font-heading: var(--font-serif);
-            /* Títulos principales */
             --font-body: var(--font-sans);
             /* Cuerpo de texto */
-            --font-display: var(--font-serif);
 
             /* Compatibilidad hacia atrás */
             /* Estilo para inputs con error de validación */
@@ -980,6 +980,23 @@
             color: var(--text-muted);
         }
 
+        /* REGLA DE ORO: NÚMEROS TABULARES PARA PRECIOS */
+        td,
+        .price-tag,
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.02em;
+            /* Ajuste óptico para Inter en números */
+        }
+
+        /* Ajuste específico para el LOGO en Full Inter */
+        #lbl_header_brand {
+            font-weight: 800;
+            /* Extra Bold para compensar la falta de Serif */
+            letter-spacing: -0.03em;
+            /* Tighter tracking para look moderno */
+        }
+
         .cart-empty-icon {
             width: 64px;
             height: 64px;
@@ -1323,12 +1340,13 @@
         }
 
         body {
-            font-family: var(--font-body);
-            background: var(--slate-50);
-            color: var(--secondary);
-            -moz-osx-font-smoothing: grayscale;
-            scroll-behavior: smooth;
+            font-family: var(--font-sans);
+            background-color: var(--bg-main);
+            color: var(--text-body);
             overflow-x: hidden;
+            /* TAREA 1: Suavizado de Fuentes (Antialiasing) - Look & Feel Premium */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* Smooth scroll optimizado para navegación interna */
@@ -3845,18 +3863,17 @@
                 <!-- REFACTOR: Padding controlado por l-sidebar-container -->
                 <div class="flex-shrink-0 mt-auto mb-4 px-4">
                     <div
-                        class="distributor-promo-card group px-5 pt-5 pb-2 bg-emerald-50 rounded-2xl relative border border-emerald-800">
+                        class="distributor-promo-card group px-5 pt-5 pb-2 bg-[var(--primary)] rounded-2xl relative border border-transparent text-white">
 
                         <div class="transition-all duration-500 ease-out relative z-10">
                             <!-- Título inicial -->
-                            <h3 class="font-bold text-lg text-emerald-900 mb-1">Únete a nuestra comunidad</h3>
+                            <h3 class="font-bold text-lg text-white mb-1">Sé distribuidor</h3>
                             <!-- Texto que aparece/desaparece o se mueve -->
                             <div
                                 class="h-0 opacity-0 group-hover:h-auto group-hover:opacity-100 overflow-hidden transition-all duration-500 delay-100">
-                                <p class="text-xs text-slate-500 mb-4 leading-relaxed font-medium">Conecta con la
-                                    naturaleza
-                                    y
-                                    mantente al día.</p>
+                                <p class="text-xs text-emerald-100/90 mb-4 leading-relaxed font-medium">
+                                    Distribuye productos homeopáticos de alta calidad y rentabilidad
+                                </p>
                             </div>
                         </div>
 
@@ -3864,7 +3881,8 @@
                         <div class="plant-button-container-2025">
                             <div class="plant-btn-wrapper-2025">
                                 <!-- Capa de hojas (detrás del botón) -->
-                                <div class="plant-leaves-layer-2025">
+                                <div class="plant-leaves-layer-2025"
+                                    style="filter: brightness(0) invert(1) opacity(0.15);">
                                     <div class="plant-leaf-icon-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 208.52 511.88">
                                             <path class="plant-color-leaf-1"
@@ -3897,9 +3915,20 @@
                                 </div>
 
                                 <!-- Botón (Delante) -->
-                                <button class="plant-btn-2025" aria-label="Ver productos Plant Based">
-                                    Plant based
-                                </button>
+                                <!-- Botón (Delante) Interactivo -->
+                                <a href="https://wa.me/573176687050?text=Hola%20Mundo%20Homeopatico,%20quiero%20mas%20informacion%20para%20ser%20distribuidor."
+                                    target="_blank"
+                                    class="plant-btn-2025 flex items-center justify-center text-center no-underline"
+                                    aria-label="Contactar por WhatsApp">
+                                    <!-- Texto Normal -->
+                                    <span class="block group-hover:hidden transition-all duration-300">Más
+                                        información</span>
+                                    <!-- Texto Hover (WhatsApp con Icono) -->
+                                    <span
+                                        class="hidden group-hover:flex items-center gap-2 transition-all duration-300 animate-fade-in">
+                                        WhatsApp <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -3949,24 +3978,32 @@
                             <div class="h-8 bg-slate-200 rounded w-1/4"></div>
                             <div class="h-4 bg-slate-100 rounded w-1/2"></div>
 
-                            <div class="border border-slate-200 rounded-lg overflow-hidden">
-                                <div class="bg-slate-50 p-4 border-b border-slate-200 flex justify-between">
-                                    <div class="h-4 bg-slate-200 rounded w-1/4"></div>
-                                    <div class="h-4 bg-slate-200 rounded w-1/6"></div>
+                            <div
+                                class="relative overflow-hidden rounded-2xl bg-[var(--primary)] border border-transparent p-5 shadow-lg group text-white transition-all cursor-pointer hover:shadow-xl hover:scale-[1.02] duration-300">
+
+                                <!-- 1. Encabezado Impactante -->
+                                <div class="relative z-10 mb-2">
+                                    <h3 class="text-xl font-bold leading-tight mb-2 tracking-tight">
+                                        Únete a nuestra<br>comunidad
+                                    </h3>
+                                    <p class="text-xs font-medium text-emerald-100/90 leading-relaxed max-w-[180px]">
+                                        Conecta con la naturaleza y mantente al día.
+                                    </p>
                                 </div>
-                                <div class="p-4 space-y-4">
-                                    <div class="flex justify-between">
-                                        <div class="h-3 bg-slate-100 rounded w-1/3"></div>
-                                        <div class="h-3 bg-slate-100 rounded w-16"></div>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <div class="h-3 bg-slate-100 rounded w-1/2"></div>
-                                        <div class="h-3 bg-slate-100 rounded w-16"></div>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <div class="h-3 bg-slate-100 rounded w-1/3"></div>
-                                        <div class="h-3 bg-slate-100 rounded w-16"></div>
-                                    </div>
+
+                                <!-- 2. Ilustración Artística (Plantas como Silueta Blanca) -->
+                                <div
+                                    class="absolute -right-8 -bottom-10 w-40 h-40 transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3 opacity-20 brightness-0 invert">
+                                    <img src="img/hojas-fondo.webp" alt="Nature" class="w-full h-full object-contain">
+                                </div>
+
+                                <!-- 3. Botón de Acción (Alto Contraste) -->
+                                <div class="relative z-10 mt-6 md:mt-auto pt-2 pb-2">
+                                    <a href="https://www.instagram.com/mundohomeopatico/" target="_blank"
+                                        class="w-full bg-white hover:bg-emerald-50 text-[var(--primary)] font-bold py-2.5 px-4 rounded-xl shadow-md flex items-center justify-center gap-2 transition-all transform group-hover:translate-y-[-2px]">
+                                        <span>Seguir</span>
+                                        <i data-lucide="instagram" class="w-4 h-4"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -4089,7 +4126,7 @@
                                     <i data-lucide="instagram"
                                         class="w-5 h-5 text-emerald-100 group-hover:text-current"></i>
                                 </a>
-                                <a id="link_social_wa" href="#" target="_blank"
+                                <a id="footer-whatsapp-link" href="#" target="_blank"
                                     class="w-10 h-10 rounded-full bg-emerald-800/50 flex items-center justify-center hover:bg-white hover:text-[var(--primary)] transition-all duration-300 hover:scale-110 border border-emerald-700 hover:border-white group"
                                     aria-label="WhatsApp">
                                     <i data-lucide="message-circle"
@@ -4596,7 +4633,9 @@
              * @returns {String} Número de WhatsApp limpio (formato: 573XXXXXXXXX)
              */
             getWhatsAppNumber() {
-                // Buscar sede principal en STATE.dist
+                // PRIMACÍA ABSOLUTA AL NÚMERO SOLICITADO (Hardcoded por seguridad)
+                // Se comenta la búsqueda en Sheets para evitar errores de datos externos por ahora
+                /*
                 const sedePrincipal = STATE.dist.find(d =>
                     (d.sedes || d.sede || d.tipo || '').toLowerCase().includes('principal')
                 );
@@ -4604,9 +4643,10 @@
                 if (sedePrincipal && sedePrincipal.whatsapp_1) {
                     return Formatters.whatsapp(sedePrincipal.whatsapp_1);
                 }
+                */
 
-                // Fallback: número principal hardcoded (el mismo de JSON-LD)
-                return '573176680750';
+                // Número Oficial Corregido (terminado en 7050)
+                return '573176687050';
             },
 
             /**
@@ -7079,13 +7119,16 @@
                 if (hqs.length > 0) {
                     sedePrincipalContainer.innerHTML = hqs.map(hq => this.generateDistributorHTML(hq, true)).join('');
 
-                    // Actualizar WhatsApp Global (Sidebar/Footer) basado en la primera sede
-                    const mainWA = hqs[0].whatsapp_1;
-                    if (mainWA) {
-                        const cleanNum = Formatters.whatsapp(mainWA);
+                    // Actualizar WhatsApp Global (Sidebar/Footer) usando la Lógica Centralizada
+                    // Esto garantiza que el botón del footer sea IDÉNTICO al del carrito
+                    const mainWANumber = WhatsAppBuilder.getWhatsAppNumber();
+                    if (mainWANumber) {
                         const msg = encodeURIComponent("Hola Mundo Homeopático, requiero información sobre productos y precios.");
+                        const finalLink = `https://wa.me/${mainWANumber}?text=${msg}`;
+
+                        // Actualizar botones globales
                         [document.getElementById('btn-whatsapp-sidebar'), document.getElementById('footer-whatsapp-link')].forEach(btn => {
-                            if (btn) btn.href = `https://wa.me/${cleanNum}?text=${msg}`;
+                            if (btn) btn.href = finalLink;
                         });
                     }
                 }
@@ -7565,11 +7608,11 @@
 
             // Sincronización Inteligente: Cargar Caché -> Renderizar -> Fetch Background -> Actualizar
             const keys = {
-                prices: 'mh_cache_prices_v2', // Forzamos nueva versión para headers dinámicos
-                nav: 'mh_cache_nav_v2',
-                faq: 'mh_cache_faq_v2',
-                dist: 'mh_cache_dist_v2',
-                banner: 'mh_cache_banner_v2'
+                prices: 'mh_cache_prices_v3', // Forzamos nueva versión (Full Inter + Dark UI)
+                nav: 'mh_cache_nav_v3',
+                faq: 'mh_cache_faq_v3',
+                dist: 'mh_cache_dist_v3',
+                banner: 'mh_cache_banner_v3'
             };
 
             // Flag para evitar doble render
