@@ -7608,11 +7608,11 @@
 
             // Sincronización Inteligente: Cargar Caché -> Renderizar -> Fetch Background -> Actualizar
             const keys = {
-                prices: 'mh_cache_prices_v3', // Forzamos nueva versión (Full Inter + Dark UI)
-                nav: 'mh_cache_nav_v3',
-                faq: 'mh_cache_faq_v3',
-                dist: 'mh_cache_dist_v3',
-                banner: 'mh_cache_banner_v3'
+                prices: 'mh_cache_prices_v2', // Restauramos v2 para recuperar datos offline/cacheados
+                nav: 'mh_cache_nav_v2',
+                faq: 'mh_cache_faq_v2',
+                dist: 'mh_cache_dist_v2',
+                banner: 'mh_cache_banner_v2'
             };
 
             // Flag para evitar doble render
