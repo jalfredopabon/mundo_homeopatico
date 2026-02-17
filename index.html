@@ -30,9 +30,7 @@
     <meta name="theme-color" content="#ffffff">
     <!-- 2. Preload de Datos Críticos (Evitar Waterfall) -->
     <!-- Nota: Pre-cargamos la tabla de precios que es el LCP (Largest Contentful Paint) -->
-    <link rel="preload"
-        href="https://docs.google.com/spreadsheets/d/e/2PACX-1vR_sBqYjCgTjYQYkQkKqKqQkKqKqQkKqKqQkKqKqQkKqKqQkKqKqQkKqKqQ/pub?gid=0&single=true&output=csv"
-        as="fetch" crossorigin="anonymous">
+
 
 
     <!-- SEO & GEO ROBUSTO - Mundo Homeopático 2026 -->
@@ -93,7 +91,7 @@
       "@context": "https://schema.org",
       "@type": "MedicalWebPage",
       "name": "Lista de Precios y Catálogo Mundo Homeopático 2026",
-      "lastReviewed": "2026-02-01",
+      "lastReviewed": "2026-02-17",
       "reviewedBy": {
         "@type": "Organization",
         "name": "Comité Farmacéutico Mundo Homeopático"
@@ -1324,10 +1322,16 @@
             background-color: var(--bg-main);
             color: var(--text-body);
             overflow-x: hidden;
-            /* TAREA 1: Suavizado de Fuentes (Antialiasing) - Look & Feel Premium */
+            
+            /* OPTIMIZACIÓN TIPOGRÁFICA MAESTRA 2026 */
+            text-rendering: optimizeLegibility;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             font-variant-numeric: tabular-nums;
+            
+            /* Funciones avanzadas de Inter para máxima nitidez */
+            font-feature-settings: "cv02", "cv05", "cv08", "ss01";
+            letter-spacing: -0.011em; /* Ajuste sutil para evitar pixelado en Inter */
         }
 
         /* Smooth scroll optimizado para navegación interna */
@@ -3723,17 +3727,25 @@
 
                 <!-- DERECHA: Herramientas (Solo Carrito por ahora) -->
                 <div class="flex items-center gap-3 md:gap-6 z-10">
-                    <!-- NUEVO: Botón Tamaño de Letra (Estilo Header) -->
-                    <button onclick="UIHandlers.toggleTextSize()" aria-label="Cambiar tamaño de fuente"
-                        class="btn-header-action">
-                        <i data-lucide="a-large-small" class="w-6 h-6"></i>
-                    </button>
+                    <div class="group relative">
+                        <button id="textSizeToggle" onclick="UIHandlers.toggleTextSize()" aria-label="Cambiar tamaño de fuente"
+                            class="btn-header-action">
+                            <i data-lucide="a-large-small" class="w-6 h-6"></i>
+                        </button>
+                        <span id="textSizeLabel" class="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-3 py-1.5 bg-slate-900/95 backdrop-blur-md text-white text-[11px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-2xl border border-white/10 transform origin-top scale-95 group-hover:scale-100 antialiased subpixel-antialiased" style="backface-visibility: hidden; transform-style: preserve-3d; will-change: transform, opacity;">
+                            Texto: Normal
+                        </span>
+                    </div>
 
-                    <!-- Ícono del Carrito de Pedidos -->
-                    <div class="ml-4 cart-icon-wrapper btn-toggle-cart btn-header-action" role="button"
-                        aria-label="Ver carrito de pedidos" tabindex="0">
-                        <i data-lucide="shopping-bag" class="w-6 h-6 text-slate-600"></i>
-                        <span id="cartBadge" class="cart-badge hidden">0</span>
+                    <div class="relative group">
+                        <div id="cartBtnHeader" class="ml-4 cart-icon-wrapper btn-toggle-cart btn-header-action" role="button"
+                            aria-label="Ver carrito de pedidos" tabindex="0">
+                            <i data-lucide="shopping-bag" class="w-6 h-6 text-slate-600"></i>
+                            <span id="cartBadge" class="cart-badge hidden">0</span>
+                        </div>
+                        <span id="cartTooltip" class="absolute top-full right-0 mt-2 px-3 py-1.5 bg-slate-900/95 backdrop-blur-md text-white text-[11px] font-bold rounded-lg opacity-0 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-2xl border border-white/10 transform origin-top scale-95 antialiased subpixel-antialiased" style="backface-visibility: hidden; transform-style: preserve-3d; will-change: transform, opacity;">
+                            ¡Agregado!
+                        </span>
                     </div>
                 </div>
             </div>
@@ -5341,8 +5353,9 @@
                 // Actualizar variable CSS centralizada
                 document.documentElement.style.setProperty('--table-font-scale', current.scale);
 
-                // Mostrar Feedback Visual con Toast
-                this.showToast(`Tamaño de letra: ${current.label}`, 'info');
+                // Actualizar Tooltip
+                const label = document.getElementById('textSizeLabel');
+                if (label) label.textContent = `Texto: ${current.label}`;
 
                 // Persistir preferencia
                 localStorage.setItem('mh_text_size_index', this.textSizeIndex);
@@ -5473,7 +5486,7 @@
                     const current = this.textSizes[this.textSizeIndex];
                     document.documentElement.style.setProperty('--table-font-scale', current.scale);
                     const label = document.getElementById('textSizeLabel');
-                    if (label) label.textContent = current.label;
+                    if (label) label.textContent = `Texto: ${current.label}`;
                 }
             },
 
@@ -5525,10 +5538,25 @@
 
                 CartManager.addItem(productData);
                 this.syncCartUI();
-                this.showToast('Producto agregado al pedido', 'success');
+                
+                // Feedback visual en el Header (Tooltip)
+                const tooltip = document.getElementById('cartTooltip');
+                if (tooltip) {
+                    tooltip.textContent = '¡Agregado!'; // Texto dinámico
+                    tooltip.classList.remove('opacity-0', 'scale-95');
+                    tooltip.classList.add('opacity-100', 'scale-100');
+                    
+                    // Limpiar timeout anterior si existe
+                    if (this.cartTooltipTimeout) clearTimeout(this.cartTooltipTimeout);
+                    
+                    this.cartTooltipTimeout = setTimeout(() => {
+                        tooltip.classList.remove('opacity-100', 'scale-100');
+                        tooltip.classList.add('opacity-0', 'scale-95');
+                    }, 1500);
+                }
 
                 // Animación de pulso en el ícono del carrito
-                const cartIcon = document.querySelector('.cart-icon-wrapper');
+                const cartIcon = document.getElementById('cartBtnHeader');
                 if (cartIcon) {
                     cartIcon.classList.add('pulse');
                     setTimeout(() => cartIcon.classList.remove('pulse'), 500);
@@ -5615,15 +5643,41 @@
                         const totalDelay = (cartItems.length * 50) + 250;
                         setTimeout(() => {
                             CartManager.clearCart();
-                            this.syncCartUI(); // Esto regenerará todos los botones "+" en las tablas
-                            this.showToast('Pedido vaciado', 'info');
+                            this.syncCartUI(); 
+                            
+                            // Feedback visual en el Header (Tooltip)
+                            const tooltip = document.getElementById('cartTooltip');
+                            if (tooltip) {
+                                tooltip.textContent = 'Pedido vaciado'; // Texto dinámico
+                                tooltip.classList.remove('opacity-0', 'scale-95');
+                                tooltip.classList.add('opacity-100', 'scale-100');
+                                if (this.cartTooltipTimeout) clearTimeout(this.cartTooltipTimeout);
+                                this.cartTooltipTimeout = setTimeout(() => {
+                                    tooltip.classList.remove('opacity-100', 'scale-100');
+                                    tooltip.classList.add('opacity-0', 'scale-95');
+                                }, 1500);
+                            }
+
                             this.closeCartDrawer();
                         }, totalDelay);
                     } else {
                         // Si no hay elementos visuales, proceder inmediatamente
                         CartManager.clearCart();
                         this.syncCartUI();
-                        this.showToast('Pedido vaciado', 'info');
+
+                        // Feedback visual en el Header (Tooltip)
+                        const tooltip = document.getElementById('cartTooltip');
+                        if (tooltip) {
+                            tooltip.textContent = 'Pedido vaciado';
+                            tooltip.classList.remove('opacity-0', 'scale-95');
+                            tooltip.classList.add('opacity-100', 'scale-100');
+                            if (this.cartTooltipTimeout) clearTimeout(this.cartTooltipTimeout);
+                            this.cartTooltipTimeout = setTimeout(() => {
+                                tooltip.classList.remove('opacity-100', 'scale-100');
+                                tooltip.classList.add('opacity-0', 'scale-95');
+                            }, 1500);
+                        }
+
                         this.closeCartDrawer();
                     }
                 }
@@ -7734,14 +7788,16 @@
                     // Solo mostramos barra de carga si NO hay nada que mostrar (primera carga)
                     if (!hasRenderedFromCache) UIHandlers.showLoading(true);
 
-                    const [p, f, dist] = await Promise.all([
+                    const [p, n, f, dist] = await Promise.all([
                         DataService.fetchCSV(APP_CONFIG.SHEETS.PRICES),
+                        DataService.fetchCSV(APP_CONFIG.SHEETS.NAV),
                         DataService.fetchCSV(APP_CONFIG.SHEETS.FAQ),
                         DataService.fetchCSV(APP_CONFIG.SHEETS.DIST)
                     ]);
 
                     // Actualizar Estado y Caché
                     if (p.length) { STATE.prices = p; localStorage.setItem(keys.prices, JSON.stringify(p)); }
+                    if (n.length) { STATE.nav = n; localStorage.setItem(keys.nav, JSON.stringify(n)); }
                     if (f.length) { STATE.faq = f; localStorage.setItem(keys.faq, JSON.stringify(f)); }
                     if (dist.length) { STATE.dist = dist; localStorage.setItem(keys.dist, JSON.stringify(dist)); }
 
