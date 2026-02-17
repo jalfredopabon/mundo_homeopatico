@@ -3756,25 +3756,52 @@
 
         <!-- SIDEBAR FIXED -->
         <aside id="mainSidebar" class="main-sidebar pb-0">
+            <!-- HEADER DEL SIDEBAR (MÓVIL: Logo + Cerrar) -->
+            <div class="md:hidden flex items-center justify-between px-4 py-4 bg-white border-b border-slate-50 flex-shrink-0 sticky top-0 z-50">
+                <div class="flex items-center gap-3">
+                    <img src="img/logo-mundo-homeopatico.webp" alt="Logo" class="h-6 w-auto">
+                    <span class="font-black text-secondary tracking-tight text-sm">Mundo Homeopático</span>
+                </div>
+                <button onclick="UIHandlers.toggleSidebar()" aria-label="Cerrar menú principal"
+                    class="text-slate-400 hover:text-slate-800 hover:bg-slate-50 rounded-lg transition-all min-w-[36px] min-h-[36px] flex items-center justify-center border border-slate-100">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
 
-            <!-- Botón Cerrar (Solo Móvil) -->
-            <button onclick="UIHandlers.toggleSidebar()" aria-label="Cerrar menú principal"
-                class="md:hidden absolute top-4 right-4 text-slate-500 hover:text-slate-800 hover:bg-surface-muted rounded-full transition-colors z-50 min-w-[48px] min-h-[48px] flex items-center justify-center">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
+            <!-- NAVEGACIÓN PRINCIPAL GLOBAL (SOLO MOVIL) -->
+            <div class="md:hidden px-4 mt-6 mb-2 space-y-2 flex-shrink-0">
+                <div class="grid grid-cols-1 gap-2">
+                    <button onclick="Navigation.goTo('catalog'); UIHandlers.toggleSidebar();" 
+                        class="flex items-center gap-3 px-4 py-3 bg-slate-50 hover:bg-white hover:border-emerald-200 text-slate-600 hover:text-emerald-700 rounded-xl font-bold text-xs transition-all border border-transparent shadow-sm">
+                        <i data-lucide="table-properties" class="w-4 h-4 text-slate-400"></i>
+                        <span>Lista de precios</span>
+                    </button>
+                    <button onclick="Navigation.goTo('contact'); UIHandlers.toggleSidebar();" 
+                        class="flex items-center gap-3 px-4 py-3 bg-slate-50 hover:bg-white hover:border-emerald-200 text-slate-600 hover:text-emerald-700 rounded-xl font-bold text-xs transition-all border border-transparent shadow-sm">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-slate-400"></i>
+                        <span>Sedes y contacto</span>
+                    </button>
+                    <button onclick="UIHandlers.showComingSoon(); UIHandlers.toggleSidebar();" 
+                        class="flex items-center gap-3 px-4 py-3 bg-emerald-50/50 hover:bg-emerald-50 text-emerald-700 rounded-xl font-bold text-xs transition-all border border-emerald-100/50 shadow-sm">
+                        <i data-lucide="stethoscope" class="w-4 h-4 text-emerald-600"></i>
+                        <span>Soy médico</span>
+                    </button>
+                </div>
+                <div class="h-px bg-slate-100/50 my-6"></div>
+            </div>
 
             <!-- VISTA: CATÁLOGO -->
-            <div id="sidebar-catalog-view" class="flex flex-col flex-1 animate-fade-in pt-0 md:pt-0">
+            <div id="sidebar-catalog-view" class="flex flex-col flex-1 animate-fade-in pt-0">
 
                 <!-- Zona Superior: Buscador y Accesos -->
                 <!-- Zona Superior: Buscador (FIGMA STYLE) -->
-                <div class="px-4 mt-4 mb-4 flex-shrink-0">
+                <div class="px-4 mt-2 mb-4 flex-shrink-0">
                     <div class="relative w-full">
                         <i data-lucide="search"
                             class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-10 pointer-events-none"></i>
                         <input type="text" id="mainSearch" placeholder="Buscar productos..."
                             aria-label="Buscar productos"
-                            class="w-full h-10 pl-10 pr-12 bg-slate-100 rounded-lg text-sm font-medium text-slate-700 placeholder-slate-400 border border-slate-300 outline-none hover:border-emerald-200 hover:bg-white hover:ring-1 hover:ring-emerald-200 focus:bg-white focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-all"
+                            class="w-full h-11 pl-11 pr-12 bg-slate-100/50 rounded-xl text-sm font-medium text-slate-700 placeholder-slate-400 border border-slate-200/60 outline-none hover:border-emerald-200 hover:bg-white focus:bg-white focus:border-emerald-400 focus:ring-4 focus:ring-emerald-50 transition-all"
                             autocomplete="off">
                         <!-- Botón Limpiar (X) -->
                         <button id="clearSearchBtn" onclick="UIHandlers.clearSearch()"
@@ -3801,7 +3828,7 @@
             </div>
 
             <!-- VISTA: CONTACTO & SEDES -->
-            <div id="sidebar-contact-view" class="hidden flex flex-col flex-1 h-full animate-fade-in pt-12 md:pt-0">
+            <div id="sidebar-contact-view" class="hidden flex flex-col flex-1 h-full animate-fade-in pt-0">
                 <!-- Zona Superior: Acciones -->
                 <!-- REFACTOR: Usando l-sidebar-container para padding horizontal correcto -->
                 <div id="sidebar-contact-top-actions" class="px-4 mt-4 mb-4 flex-shrink-0">
