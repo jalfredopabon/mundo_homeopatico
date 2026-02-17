@@ -1531,9 +1531,48 @@
             transform: rotate(-15deg) scale(1.05);
         }
 
+        /* --- SIDEBAR REFINEMENT (HIERARCHY & BREATHING) --- */
+        .sidebar-lvl1-container {
+            margin-top: var(--space-xl); /* 32px antes de un gran bloque (Nivel 1) */
+            width: 100%;
+        }
+        
+        /* Sin margen extra si es el primer elemento */
+        #sidebar-menu > .sidebar-lvl1-container:first-child {
+            margin-top: var(--space-xs); 
+        }
+
+        .sidebar-lvl1-label {
+            padding: var(--space-s) var(--space-m);
+            padding-bottom: 2px; /* Espacio mínimo después del título principal */
+            font-size: var(--font-sm);
+            font-weight: 800;
+            color: var(--secondary);
+            text-transform: none;
+            letter-spacing: -0.01em;
+        }
+
+        .sidebar-lvl2-container {
+            margin-top: var(--space-l); /* 24px antes de una subcategoría (Nivel 2) */
+        }
+        
+        /* REGLA MAESTRA: Si el Nivel 2 sigue inmediatamente al Nivel 1, eliminar margen superior */
+        /* Esto mantiene "De nuestra farmacia" pegado a "Según prescripción" */
+        .sidebar-lvl1-label + .sidebar-lvl2-group > .sidebar-lvl2-container:first-child {
+            margin-top: var(--space-xs);
+        }
+
+        .sidebar-lvl2-label {
+            padding: var(--space-xs) var(--space-m);
+            padding-bottom: 2px;
+            font-size: var(--font-xs);
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
         /* --- SIDEBAR CSS VACUUMED --- */
-        /* Todo el estilo del sidebar ahora se gestiona vía clases utilitarias en JS */
-        /* Se mantienen solo animaciones base */
 
 
         .catalog-card {
@@ -3757,19 +3796,18 @@
         <!-- SIDEBAR FIXED -->
         <aside id="mainSidebar" class="main-sidebar pb-0">
             <!-- HEADER DEL SIDEBAR (MÓVIL: Logo + Cerrar) -->
-            <div class="md:hidden flex items-center justify-between px-4 py-4 bg-white border-b border-slate-50 flex-shrink-0 sticky top-0 z-50">
+            <div class="md:hidden flex items-center justify-between px-4 py-2 bg-white border-b border-slate-50 flex-shrink-0 sticky top-0 z-50">
                 <div class="flex items-center gap-3">
-                    <img src="img/logo-mundo-homeopatico-header.webp" alt="Logo" class="h-6 w-auto" onerror="this.src='img/logo-mundo-homeopatico.webp'">
-                    <span class="font-black text-secondary tracking-tight text-sm">Mundo Homeopático</span>
+                    <img src="img/logo-mundo-homeopatico-header.webp" alt="Logo" class="h-5 w-auto" onerror="this.src='img/logo-mundo-homeopatico.webp'">
                 </div>
                 <button onclick="UIHandlers.toggleSidebar()" aria-label="Cerrar menú principal"
-                    class="text-slate-400 hover:text-slate-800 hover:bg-slate-50 rounded-lg transition-all min-w-[36px] min-h-[36px] flex items-center justify-center border border-slate-100">
-                    <i data-lucide="x" class="w-5 h-5"></i>
+                    class="text-slate-400 hover:text-slate-800 hover:bg-slate-50 rounded-lg transition-all min-w-[32px] min-h-[32px] flex items-center justify-center border border-slate-100">
+                    <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
 
             <!-- NAVEGACIÓN PRINCIPAL GLOBAL (SOLO MOVIL) -->
-            <div class="md:hidden px-4 mt-6 mb-2 space-y-2 flex-shrink-0">
+            <div class="md:hidden px-4 mt-4 mb-2 space-y-2 flex-shrink-0">
                 <div class="grid grid-cols-1 gap-2">
                     <button onclick="Navigation.goTo('catalog'); UIHandlers.toggleSidebar();" 
                         class="flex items-center gap-3 px-4 py-3 bg-slate-50 hover:bg-white hover:border-emerald-200 text-slate-600 hover:text-emerald-700 rounded-xl font-bold text-xs transition-all border border-transparent shadow-sm">
@@ -6672,18 +6710,18 @@
 
                 // --- Nivel 0 (Raíz): SECCIÓN PRINCIPAL ("De nuestra farmacia") ---
                 if (level === 0) {
-                    return `<div class="mb-0.5 w-full">
-                                <div class="px-4 py-1.5 text-sm font-bold text-slate-900 mb-0">
+                    return `<div class="sidebar-lvl1-container">
+                                <div class="sidebar-lvl1-label">
                                     ${escapeHtml(node.title)}
                                 </div>
-                                <div class="space-y-1">${childrenHtml}</div>
+                                <div class="sidebar-lvl2-group">${childrenHtml}</div>
                             </div>`;
                 }
 
                 // --- Nivel 1 (Sub-sección): SUBTÍTULO ESTÁTICO ---
                 if (level === 1) {
-                    return `<div class="mt-0 mb-0.5">
-                                <div class="px-4 py-1.5 text-sm font-normal text-slate-400">
+                    return `<div class="sidebar-lvl2-container">
+                                <div class="sidebar-lvl2-label">
                                     ${escapeHtml(node.title)}
                                 </div>
                                 <div class="space-y-0.5">${childrenHtml}</div>
