@@ -145,7 +145,7 @@
     <!-- Fuentes Google Optimizadas con display=swap -->
     <!-- TAREA 2: Tipografía Moderna 'Inter' para UI/UX de alto nivel -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:wght@400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Serif+Display:wght@400&display=swap"
         rel="stylesheet">
 
     <!-- Iconos Lucide (Carga Diferida para no bloquear renderizado) -->
@@ -230,8 +230,8 @@
             /* Texto principal (#1a1a1a vs #000) */
             --text-body: #374151;
             /* Texto cuerpo (Gris suave optimizado lectura) */
-            --text-muted: #6b7280;
-            /* Texto secundario */
+            --text-muted: #4b5563;
+            /* Texto secundario (Oscurecido para contraste) */
 
             /* Accent - Verde natural */
             --accent: hsl(150, 60%, 35%);
@@ -342,10 +342,10 @@
            UTILIDADES Y ANIMACIONES
            ------------------------------------------- */
             /* ESCALA TIPOGRÁFICA (Ajustada a Figma 'Body') */
-            --font-xs: 13px;
+            --font-xs: 14px;
             /* Subida ligera para legibilidad en hijos */
-            --font-sm: 15px;
-            /* Base del Sidebar (Casi 16px) */
+            --font-sm: 16px;
+            /* Base del Sidebar */
             --font-base: 16px;
             /* FIGMA BODY SIZE */
             /* Sidebar L1 / Precios */
@@ -1543,7 +1543,7 @@
         }
 
         .sidebar-lvl1-label {
-            padding: var(--space-s) var(--space-m);
+            padding: var(--space-s) var(--space-xl);
             padding-bottom: 2px; /* Espacio mínimo después del título principal */
             font-size: var(--font-sm);
             font-weight: 800;
@@ -1563,7 +1563,7 @@
         }
 
         .sidebar-lvl2-label {
-            padding: var(--space-xs) var(--space-m);
+            padding: var(--space-xs) var(--space-xl);
             padding-bottom: 2px;
             font-size: var(--font-xs);
             font-weight: 500; /* Un poco más ligero que el nivel 1 */
@@ -3238,8 +3238,8 @@
 
         /* FASE 2: Hover Grow Up - Ajuste de Medidas */
         .distributor-promo-card:hover .plant-button-container-2025 {
-            height: 190px !important;
-            padding-top: 130px !important;
+            height: 240px !important;
+            padding-top: 160px !important;
         }
 
         /* Ajuste inicial del padding para estado colapsado */
@@ -3833,7 +3833,7 @@
 
                 <!-- Zona Superior: Buscador y Accesos -->
                 <!-- Zona Superior: Buscador (FIGMA STYLE) -->
-                <div class="px-4 mt-2 mb-4 flex-shrink-0">
+                <div class="px-4 mt-8 mb-4 flex-shrink-0">
                     <div class="relative w-full">
                         <i data-lucide="search"
                             class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 z-10 pointer-events-none"></i>
@@ -3869,7 +3869,7 @@
             <div id="sidebar-contact-view" class="hidden flex flex-col flex-1 h-full animate-fade-in pt-0">
                 <!-- Zona Superior: Acciones -->
                 <!-- REFACTOR: Usando l-sidebar-container para padding horizontal correcto -->
-                <div id="sidebar-contact-top-actions" class="px-4 mt-4 mb-4 flex-shrink-0">
+                <div id="sidebar-contact-top-actions" class="px-4 mt-8 mb-4 flex-shrink-0">
                     <!-- Botón Instagram -->
                     <a href="https://www.instagram.com/mundohomeopatico_/" target="_blank"
                         class="btn-instagram-sidebar group relative" aria-label="Síguenos en Instagram">
@@ -3921,7 +3921,7 @@
                 <!-- REFACTOR: Padding controlado por l-sidebar-container -->
                 <div class="flex-shrink-0 mt-auto mb-4 px-4">
                     <div
-                        class="distributor-promo-card group px-5 pt-5 pb-2 bg-emerald-900 rounded-2xl relative shadow-lg">
+                        class="distributor-promo-card group px-5 pt-5 pb-6 bg-emerald-900 rounded-2xl relative shadow-lg">
 
                         <div class="transition-all duration-500 ease-out relative z-10">
                             <!-- Título inicial -->
@@ -5407,8 +5407,8 @@
             textSizeTimeout: null,
             textSizes: [
                 { scale: 1, label: 'Normal' },
-                { scale: 1.25, label: 'Grande' },
-                { scale: 1.5, label: 'Muy grande' }
+                { scale: 1.25, label: 'Mediana' },
+                { scale: 1.5, label: 'Grande' }
             ],
             toggleTextSize() {
                 // Ciclar al siguiente tamaño
@@ -6759,7 +6759,7 @@
                 // NIVEL 1: SECCIÓN (Optimizado: márgenes reducidos y ancho de lectura controlado)
                 html += `<div class="section-container mb-12 w-full">
                             <h1 class="text-3xl md:text-4xl font-bold text-secondary mb-3 tracking-tight w-full">${renderText(section.title)}</h1>
-                            <p class="text-slate-500 mb-8 text-base md:text-lg font-normal w-full max-w-3xl leading-relaxed">${renderText(section.desc)}</p>
+                            <p class="text-slate-600 mb-8 text-base md:text-lg font-normal w-full max-w-3xl leading-relaxed">${renderText(section.desc)}</p>
                             <div class="section-content">`;
 
                 section.children.forEach(node => {
@@ -6785,7 +6785,7 @@
                     // Solo mostramos título si NO es Nivel 1 (ya mostrado por generateSingleSectionHTML)
                     // Solo mostramos título si NO es Nivel 1 (ya mostrado por generateSingleSectionHTML)
                     if (node.level > 1) {
-                        const descHtml = node.desc ? `<p class="subtitulo-desc mb-3 text-slate-500 text-sm leading-relaxed">${renderText(node.desc)}</p>` : '';
+                        const descHtml = node.desc ? `<p class="subtitulo-desc mb-3 text-slate-600 text-sm leading-relaxed">${renderText(node.desc)}</p>` : '';
                         fragment += `<div class="mb-6 pl-0 ml-0">
                                     <div class="mb-3 flex flex-col">
                                         <h2 class="text-xl font-bold text-secondary mb-2 pl-0 ml-0 tracking-tight">${renderText(node.title)}</h2>
@@ -6816,7 +6816,7 @@
                     fragment += `<div id="sec-${node.tableId || node.id}" class="l2-container mb-10 bg-white rounded-xl overflow-hidden p-6 border border-slate-100">`;
                     // Título del Item
                     const dispTitle = node.title;
-                    const descHtml = node.desc ? `<p class="subtitulo-desc mb-4">${renderText(node.desc)}</p>` : '';
+                    const descHtml = node.desc ? `<p class="subtitulo-desc mb-4 text-slate-600 text-sm leading-relaxed">${renderText(node.desc)}</p>` : '';
 
                     if (dispTitle && node.level > 1) { // Evitar título duplicado si ya lo puso la categoría
                         // Mostrar título de item y descripción
@@ -7128,7 +7128,7 @@
 
                 return `<section>
                     ${showTitle ? `<h5 class="text-xl font-black text-secondary mb-6 section-title-n3">${renderText(titleLong)}</h5>
-                                   <p class="text-xs text-slate-400 mb-6 font-normal tracking-tight">${renderText(meta.nivel_3_descripcion)}</p>` : ''}
+                                   <p class="text-sm text-slate-600 mb-6 font-medium tracking-tight leading-relaxed">${renderText(meta.nivel_3_descripcion)}</p>` : ''}
 
                     ${items.length ? `<div class="data-grid-container w-full">
                         <table class="data-grid w-full">
@@ -7149,7 +7149,7 @@
                                 <tr class="hover:bg-surface-muted transition-colors" data-product-id="${escapeHtml(productId)}">
                                     <td class="product-name align-middle">
                                         <div class="font-bold text-slate-800">${this.processBadgesInline(p.producto || '')}</div>
-                                        <div class="text-slate-500 font-normal mt-0.5">${this.processBadgesInline(p.presentacion || '')}</div>
+                                        <div class="text-slate-600 font-medium mt-0.5">${this.processBadgesInline(p.presentacion || '')}</div>
                                     </td>
                                     <td class="text-right font-bold text-brand-vibrant align-middle" data-label="${escapeHtml(headerFarm)}">${this.formatPrice(p.precio_farmacia)}</td>
                                     <td class="text-right font-black text-secondary align-middle" data-label="${escapeHtml(headerPub)}">${this.formatPrice(p.precio_publico)}</td>
