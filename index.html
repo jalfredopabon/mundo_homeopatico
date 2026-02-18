@@ -91,7 +91,7 @@
       "@context": "https://schema.org",
       "@type": "MedicalWebPage",
       "name": "Lista de Precios y Catálogo Mundo Homeopático 2026",
-      "lastReviewed": "2026-02-17",
+      "lastReviewed": "2026-02-18",
       "reviewedBy": {
         "@type": "Organization",
         "name": "Comité Farmacéutico Mundo Homeopático"
@@ -1440,6 +1440,20 @@
             color: var(--primary);
         }
 
+        /* IDENTIDAD: Isotipo (MH) */
+        .logo-isotype {
+            height: 18px;
+            width: auto;
+            object-fit: contain;
+            transition: opacity 0.3s ease;
+        }
+
+        @media (min-width: 768px) {
+            .logo-isotype {
+                height: 26px;
+            }
+        }
+
         html {
             scroll-padding-top: calc(var(--header-h) + 20px);
         }
@@ -1531,7 +1545,6 @@
             transform: rotate(-15deg) scale(1.05);
         }
 
-        /* --- SIDEBAR REFINEMENT (HIERARCHY & BREATHING) --- */
         .sidebar-lvl1-container {
             margin-top: var(--space-l); /* Unificado a 24px para armonía rítmica */
             width: 100%;
@@ -2480,6 +2493,15 @@
             }
 
             /* Fix Search Bar on Mobile */
+            .sidebar-mobile-header {
+                padding-left: var(--space-xl); /* Alineación exacta 32px (Eje Único) */
+                padding-right: var(--space-m);
+                padding-top: var(--space-s);
+                padding-bottom: var(--space-s);
+                background-color: white;
+                border-bottom: 1px solid var(--slate-50);
+            }
+
             .search-container {
                 margin-top: 1rem;
             }
@@ -3724,7 +3746,7 @@
                     <!-- Logo Principal (Solo Desktop) -->
                     <a href="#" onclick="Navigation.goTo('catalog')"
                         class="hidden md:flex items-center gap-2 md:gap-3 transition-opacity hover:opacity-80 max-w-[280px]">
-                        <img src="img/logo-mundo-homeopatico-header.webp" alt="Logo" class="h-5 md:h-7 w-auto"
+                        <img src="img/logo-mundo-homeopatico-header.webp" alt="Logo" class="logo-isotype"
                             onerror="this.src='img/logo-mundo-homeopatico.webp'">
                         <h1 class="font-black text-base md:text-lg tracking-tight text-secondary leading-none">
                             Mundo Homeopático
@@ -3771,7 +3793,7 @@
                             class="btn-header-action">
                             <i data-lucide="a-large-small" class="w-6 h-6"></i>
                         </button>
-                        <span id="textSizeLabel" class="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-3 py-1.5 bg-slate-900/95 backdrop-blur-md text-white text-[11px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-2xl border border-white/10 transform origin-top scale-95 group-hover:scale-100 antialiased subpixel-antialiased" style="backface-visibility: hidden; transform-style: preserve-3d; will-change: transform, opacity;">
+                        <span id="textSizeLabel" class="absolute top-full left-1/2 -translate-x-1/2 mt-3 px-4 py-2 bg-slate-900/95 backdrop-blur-md text-white text-[13px] font-bold rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-2xl border border-white/10 transform origin-top scale-95 group-hover:scale-100 antialiased subpixel-antialiased" style="backface-visibility: hidden; transform-style: preserve-3d; will-change: transform, opacity;">
                             Texto: Normal
                         </span>
                     </div>
@@ -3782,7 +3804,7 @@
                             <i data-lucide="shopping-bag" class="w-6 h-6 text-slate-600"></i>
                             <span id="cartBadge" class="cart-badge hidden">0</span>
                         </div>
-                        <span id="cartTooltip" class="absolute top-full right-0 mt-2 px-3 py-1.5 bg-slate-900/95 backdrop-blur-md text-white text-[11px] font-bold rounded-lg opacity-0 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-2xl border border-white/10 transform origin-top scale-95 antialiased subpixel-antialiased" style="backface-visibility: hidden; transform-style: preserve-3d; will-change: transform, opacity;">
+                        <span id="cartTooltip" class="absolute top-full right-0 mt-3 px-4 py-2 bg-slate-900/95 backdrop-blur-md text-white text-[13px] font-bold rounded-xl opacity-0 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-2xl border border-white/10 transform origin-top scale-95 antialiased subpixel-antialiased" style="backface-visibility: hidden; transform-style: preserve-3d; will-change: transform, opacity;">
                             ¡Agregado!
                         </span>
                     </div>
@@ -3796,9 +3818,9 @@
         <!-- SIDEBAR FIXED -->
         <aside id="mainSidebar" class="main-sidebar pb-0">
             <!-- HEADER DEL SIDEBAR (MÓVIL: Logo + Cerrar) -->
-            <div class="md:hidden flex items-center justify-between px-4 py-2 bg-white border-b border-slate-50 flex-shrink-0 sticky top-0 z-50">
+            <div class="md:hidden sidebar-mobile-header flex items-center justify-between flex-shrink-0 sticky top-0 z-50">
                 <div class="flex items-center gap-3">
-                    <img src="img/logo-mundo-homeopatico-header.webp" alt="Logo" class="h-5 w-auto" onerror="this.src='img/logo-mundo-homeopatico.webp'">
+                    <img src="img/logo-mundo-homeopatico-header.webp" alt="Logo" class="logo-isotype" onerror="this.src='img/logo-mundo-homeopatico.webp'">
                 </div>
                 <button onclick="UIHandlers.toggleSidebar()" aria-label="Cerrar menú principal"
                     class="text-slate-400 hover:text-slate-800 hover:bg-slate-50 rounded-lg transition-all min-w-[32px] min-h-[32px] flex items-center justify-center border border-slate-100">
@@ -5407,7 +5429,7 @@
             textSizeTimeout: null,
             textSizes: [
                 { scale: 1, label: 'Normal' },
-                { scale: 1.25, label: 'Mediana' },
+                { scale: 1.25, label: 'Mediano' },
                 { scale: 1.5, label: 'Grande' }
             ],
             toggleTextSize() {
@@ -7687,11 +7709,11 @@
 
             // Sincronización Inteligente: Cargar Caché -> Renderizar -> Fetch Background -> Actualizar
             const keys = {
-                prices: 'mh_cache_prices_v2', // Forzamos nueva versión para headers dinámicos
-                nav: 'mh_cache_nav_v2',
-                faq: 'mh_cache_faq_v2',
-                dist: 'mh_cache_dist_v2',
-                banner: 'mh_cache_banner_v2'
+                prices: 'mh_cache_prices_v3', // Forzamos nueva versión para headers dinámicos
+                nav: 'mh_cache_nav_v3',
+                faq: 'mh_cache_faq_v3',
+                dist: 'mh_cache_dist_v3',
+                banner: 'mh_cache_banner_v3'
             };
 
             // Flag para evitar doble render
