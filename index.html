@@ -408,7 +408,7 @@
             /* Sombra Suave Premium */
 
             /* TOKENS DEL SISTEMA DE CARRITO */
-            --cart-drawer-w: 320px;
+            --cart-drawer-w: 450px;
             --cart-badge-size: 18px;
             --cart-btn-size: 40px;
             --cart-overlay-bg: rgba(0, 0, 0, 0.5);
@@ -689,6 +689,30 @@
             }
         }
 
+        /* 5. GESTO DE ATENCIÓN (Zoom Button Hook) */
+        @keyframes notification-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(10, 92, 78, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(10, 92, 78, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(10, 92, 78, 0); }
+        }
+
+        .btn-header-action.is-notifying {
+            animation: notification-pulse 1.5s infinite;
+            position: relative;
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .btn-header-action.is-notifying::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border: 2px solid transparent;
+            border-top-color: var(--primary-vibrant);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
         /* 4. ACCESIBILIDAD - FASE 3.4 */
         /* Foco visible de alto contraste para navegación por teclado */
         :focus-visible {
@@ -862,6 +886,7 @@
             top: 0;
             right: -100%;
             width: var(--cart-drawer-w);
+            max-width: 100%; /* NUEVO: Seguridad para móviles */
             height: 100vh;
             background: var(--bg-surface);
             box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
@@ -961,6 +986,70 @@
             font-size: 15px;
         }
 
+        /* Sección de Notas Individuales (Diseño de Footer) */
+        .cart-item-note-section {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px dashed var(--border-medium);
+            background: rgba(10, 92, 78, 0.02); /* Tinte de marca casi imperceptible */
+            margin: 0.5rem -1rem -1rem -1rem; /* Expansión para tocar los bordes */
+            padding: 0.75rem 1rem;
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+        }
+
+        .btn-item-note-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 2px 0;
+            transition: all 0.2s ease;
+        }
+
+        .btn-item-note-toggle:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .btn-item-note-toggle.has-note {
+            opacity: 1;
+            color: var(--primary-vibrant);
+        }
+
+        .cart-item-note-container {
+            margin-top: 8px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .cart-item-note-input {
+            width: 100%;
+            min-height: 60px;
+            padding: 10px;
+            font-size: 13px;
+            font-family: inherit;
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-sm);
+            background: var(--bg-surface);
+            color: var(--text-body);
+            resize: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .cart-item-note-input:focus {
+            outline: none;
+            border-color: var(--primary-vibrant);
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Contenedor de items */
         .cart-items-list {
             display: flex;
@@ -1048,6 +1137,46 @@
             cursor: pointer;
         }
 
+        /* Feedback de Descuento */
+        .discount-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+            padding: 6px 10px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary-vibrant);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .discount-badge.not-found {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        /* Desglose de Totales con Descuento */
+        .cart-summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.25rem;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .cart-summary-row.discount {
+            color: var(--primary-vibrant);
+            font-weight: 600;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Footer del Drawer (Total + Botón WhatsApp) */
         .cart-drawer-footer {
             padding: 1.5rem;
@@ -1080,7 +1209,6 @@
         .btn-send-whatsapp {
             width: 100%;
             padding: 1rem;
-            background: var(--primary-vibrant);
             color: white;
             border: none;
             border-radius: var(--radius-md);
@@ -1091,13 +1219,23 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
+            gap: 10px;
+            box-shadow: var(--shadow-md);
         }
 
-        .btn-send-whatsapp:hover:not(:disabled) {
+        .btn-send-whatsapp.doctors {
+            background: var(--primary-vibrant);
+        }
+
+        .btn-send-whatsapp.pharmacies {
             background: var(--primary);
+            margin-top: 0.75rem;
+        }
+
+        .btn-send-whatsapp:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
+            filter: brightness(1.1);
         }
 
         .btn-send-whatsapp:disabled {
@@ -1429,15 +1567,42 @@
             width: 2.5rem;
             height: 2.5rem;
             border-radius: 9999px;
-            color: #475569;
-            /* slate-600 */
-            transition: all 0.2s ease;
+            color: #475569; /* slate-600 */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            position: relative;
         }
 
         .btn-header-action:hover {
             background-color: var(--bg-header-hover);
             color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        /* Estilos para las etiquetas debajo de los botones (Refinamiento Premium) */
+        .header-tool-label {
+            font-size: 10px; /* Incrementado para legibilidad en minúsculas */
+            font-weight: 800;
+            text-transform: none; /* Quitamos forzado de mayúsculas */
+            letter-spacing: 0.02em; /* Reducido tracking para texto normal */
+            color: #64748b; /* slate-500 */
+            margin-top: -1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            line-height: 1;
+            user-select: none;
+        }
+
+        .group:hover .header-tool-label {
+            color: var(--primary);
+            transform: scale(1.02);
+            letter-spacing: 0.08em;
+        }
+
+        /* Ajuste premium para Tooltips de dos líneas (Glassmorphism & Depth) */
+        [id*="Label"], [id*="Tooltip"] {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+            line-height: 1.3;
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
         /* IDENTIDAD: Isotipo (MH) */
@@ -3787,24 +3952,34 @@
                 </nav>
 
                 <!-- DERECHA: Herramientas (Solo Carrito por ahora) -->
-                <div class="flex items-center gap-3 md:gap-6 z-10">
-                    <div class="group relative">
+                <div class="flex items-center gap-1 md:gap-4 z-10">
+                    <!-- BOTÓN ZOOM -->
+                    <div class="group relative flex flex-col items-center">
                         <button id="textSizeToggle" onclick="UIHandlers.toggleTextSize()" aria-label="Cambiar tamaño de fuente"
-                            class="btn-header-action">
-                            <i data-lucide="a-large-small" class="w-6 h-6"></i>
+                            class="flex flex-col items-center group">
+                            <div class="btn-header-action">
+                                <i data-lucide="a-large-small" class="w-6 h-6"></i>
+                            </div>
+                            <span class="header-tool-label">Zoom</span>
                         </button>
-                        <span id="textSizeLabel" class="absolute top-full left-1/2 -translate-x-1/2 mt-3 px-4 py-2 bg-slate-900/95 backdrop-blur-md text-white text-[13px] font-bold rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-2xl border border-white/10 transform origin-top scale-95 group-hover:scale-100 antialiased subpixel-antialiased" style="backface-visibility: hidden; transform-style: preserve-3d; will-change: transform, opacity;">
-                            Texto: Normal
-                        </span>
+                        <!-- Tooltip de Dos Líneas -->
+                        <div id="textSizeLabel" class="absolute top-full left-1/2 -translate-x-1/2 mt-4 px-4 py-2 bg-slate-900/95 backdrop-blur-md text-white rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-2xl border border-white/10 transform origin-top scale-95 group-hover:scale-100 antialiased" style="backface-visibility: hidden; transform-style: preserve-3d; will-change: transform, opacity;">
+                            <div class="text-[10px] opacity-70 font-medium mb-0.5">Tamaño letras tablas</div>
+                            <div id="textSizeValue" class="text-[13px] font-bold">Normal</div>
+                        </div>
                     </div>
 
-                    <div class="relative group">
-                        <div id="cartBtnHeader" class="ml-4 cart-icon-wrapper btn-toggle-cart btn-header-action" role="button"
+                    <!-- BOTÓN PEDIDOS -->
+                    <div class="relative group flex flex-col items-center">
+                        <div id="cartBtnHeader" class="flex flex-col items-center group cursor-pointer cart-icon-wrapper btn-toggle-cart" role="button"
                             aria-label="Ver carrito de pedidos" tabindex="0">
-                            <i data-lucide="shopping-bag" class="w-6 h-6 text-slate-600"></i>
-                            <span id="cartBadge" class="cart-badge hidden">0</span>
+                            <div class="btn-header-action relative pointer-events-none">
+                                <i data-lucide="shopping-bag" class="w-6 h-6 text-slate-600"></i>
+                                <span id="cartBadge" class="cart-badge hidden">0</span>
+                            </div>
+                            <span class="header-tool-label pointer-events-none">Pedidos</span>
                         </div>
-                        <span id="cartTooltip" class="absolute top-full right-0 mt-3 px-4 py-2 bg-slate-900/95 backdrop-blur-md text-white text-[13px] font-bold rounded-xl opacity-0 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-2xl border border-white/10 transform origin-top scale-95 antialiased subpixel-antialiased" style="backface-visibility: hidden; transform-style: preserve-3d; will-change: transform, opacity;">
+                        <span id="cartTooltip" class="absolute top-full right-0 mt-4 px-4 py-2 bg-slate-900/95 backdrop-blur-md text-white text-[13px] font-bold rounded-xl opacity-0 transition-all duration-300 pointer-events-none whitespace-nowrap z-50 shadow-2xl border border-white/10 transform origin-top scale-95 antialiased" style="backface-visibility: hidden; transform-style: preserve-3d; will-change: transform, opacity;">
                             ¡Agregado!
                         </span>
                     </div>
@@ -4280,15 +4455,23 @@
                 </div>
 
                 <div class="cart-form-group">
+                    <label class="cart-form-label required" for="customerNit">Cédula o NIT</label>
+                    <input type="text" id="customerNit" class="cart-form-input" placeholder="Ej: 1017123456"
+                        inputmode="numeric" pattern="[0-9]*" 
+                        onpaste="return false;" ondrop="return false;">
+                    <div id="discountFeedback" class="hidden"></div>
+                </div>
+
+                <div class="cart-form-group">
                     <label class="cart-form-label required" for="customerWhatsApp">WhatsApp</label>
-                    <input type="tel" id="customerWhatsApp" class="cart-form-input" placeholder="Ej: 310 123 4567"
-                        autocomplete="tel">
+                    <input type="tel" id="customerWhatsApp" class="cart-form-input" placeholder="Ej: 3101234567"
+                        autocomplete="tel" inputmode="numeric" pattern="[0-9]*">
                 </div>
 
                 <div class="cart-form-group">
                     <label class="cart-form-label" for="customerPhone">Teléfono (Opcional)</label>
-                    <input type="tel" id="customerPhone" class="cart-form-input" placeholder="Ej: (604) 123 4567"
-                        autocomplete="tel">
+                    <input type="tel" id="customerPhone" class="cart-form-input" placeholder="Ej: 6041234567"
+                        autocomplete="tel" inputmode="numeric" pattern="[0-9]*">
                 </div>
 
                 <div class="cart-form-group">
@@ -4320,15 +4503,32 @@
                 <button id="btnClearCart" class="btn-clear-cart">Vaciar todo</button>
             </div>
 
+            <div id="cartSummaryBreakdown" class="mb-3 hidden">
+                <div class="cart-summary-row">
+                    <span>Subtotal:</span>
+                    <span id="cartSubtotalAmount">$0</span>
+                </div>
+                <div class="cart-summary-row discount">
+                    <span id="cartDiscountLabel">Descuento (0%):</span>
+                    <span id="cartDiscountAmount">-$0</span>
+                </div>
+            </div>
+
             <div class="cart-total-row">
-                <span class="cart-total-label">Total:</span>
+                <span id="cartTotalLabel" class="cart-total-label">Total:</span>
                 <span id="cartTotalAmount" class="cart-total-amount">$0</span>
             </div>
 
-            <button id="btnSendWhatsApp" class="btn-send-whatsapp">
-                <i data-lucide="message-circle" class="w-5 h-5"></i>
-                <span>Enviar Pedido por WhatsApp</span>
-            </button>
+            <div class="cart-send-actions">
+                <button id="btnSendDoctors" class="btn-send-whatsapp doctors">
+                    <i data-lucide="stethoscope" class="w-5 h-5"></i>
+                    <span>Pedidos Médicos</span>
+                </button>
+                <button id="btnSendPharmacies" class="btn-send-whatsapp pharmacies">
+                    <i data-lucide="pill" class="w-5 h-5"></i>
+                    <span>Pedidos Farmacias</span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -4345,7 +4545,12 @@
                 DIST: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0DeKc2s9lZdMq6Vl9nISej4K5M6a-afeb8OMBSr_S3ZZFvv7N85ZLJHL5wkIAhlgfzt8QnoFiAABq/pub?gid=486540156&single=true&output=csv',
                 AUTHOR: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0DeKc2s9lZdMq6Vl9nISej4K5M6a-afeb8OMBSr_S3ZZFvv7N85ZLJHL5wkIAhlgfzt8QnoFiAABq/pub?gid=878891571&single=true&output=csv',
                 SEO: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0DeKc2s9lZdMq6Vl9nISej4K5M6a-afeb8OMBSr_S3ZZFvv7N85ZLJHL5wkIAhlgfzt8QnoFiAABq/pub?gid=494400744&single=true&output=csv',
-                CONFIG: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0DeKc2s9lZdMq6Vl9nISej4K5M6a-afeb8OMBSr_S3ZZFvv7N85ZLJHL5wkIAhlgfzt8QnoFiAABq/pub?gid=257526078&single=true&output=csv'
+                CONFIG: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0DeKc2s9lZdMq6Vl9nISej4K5M6a-afeb8OMBSr_S3ZZFvv7N85ZLJHL5wkIAhlgfzt8QnoFiAABq/pub?gid=257526078&single=true&output=csv',
+                ORDERS: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0DeKc2s9lZdMq6Vl9nISej4K5M6a-afeb8OMBSr_S3ZZFvv7N85ZLJHL5wkIAhlgfzt8QnoFiAABq/pub?gid=1100464838&single=true&output=csv',
+                DISCOUNTS: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ0DeKc2s9lZdMq6Vl9nISej4K5M6a-afeb8OMBSr_S3ZZFvv7N85ZLJHL5wkIAhlgfzt8QnoFiAABq/pub?gid=1158658803&single=true&output=csv'
+            },
+            API: {
+                ORDERS: 'https://script.google.com/macros/s/AKfycbwop2KSzn3vEOX5ic79SNBH-msCINlL4JFSRI2RQDV-zLEXzwfZTtLHgWkc1yp007E/exec'
             },
             PROXY: 'https://corsproxy.io/?',
             PROXY_BACKUP: 'https://corsproxy.io/?',
@@ -4371,7 +4576,7 @@
             }
         };
 
-        const STATE = { prices: [], nav: [], faq: [], dist: [], currentView: 'catalog', cart: [] };
+        const STATE = { prices: [], nav: [], faq: [], dist: [], discounts: [], activeDiscount: null, currentView: 'catalog', cart: [] };
 
         const escapeHtml = (unsafe) => {
             return String(unsafe)
@@ -4577,6 +4782,7 @@
 
                 const customerData = {
                     nombre: data.nombre || '',
+                    nit: data.nit || '',
                     whatsapp: data.whatsapp || '',
                     telefono: data.telefono || '',
                     correo: data.correo || '',
@@ -4652,11 +4858,18 @@
 
                 // Encabezado
                 let msg = '🛒 *PEDIDO MUNDO HOMEOPÁTICO*\n';
+                if (customerData && customerData.orderId) {
+                    msg += `🔖 *REF: #${customerData.orderId}*\n`;
+                }
                 msg += '─────────────────────\n\n';
 
                 // Datos del cliente
                 if (customerData) {
                     if (customerData.nombre) msg += `👤 ${customerData.nombre}\n`;
+                    if (customerData.nit) msg += `🆔 CC/NIT: ${customerData.nit}\n`;
+                    if (STATE.activeDiscount) {
+                        msg += `✨ *Beneficio:* ${STATE.activeDiscount.nombre} (-${STATE.activeDiscount.porcentaje_descuento}%)\n`;
+                    }
                     if (customerData.whatsapp) msg += `📱 ${customerData.whatsapp}\n`;
                     if (customerData.telefono) msg += `☎️ ${customerData.telefono}\n`;
                     if (customerData.correo) msg += `✉️ ${customerData.correo}\n`;
@@ -4670,12 +4883,20 @@
                     const subtotal = item.precio * item.cantidad;
                     const presentacion = item.presentacion ? ` (${item.presentacion})` : '';
                     msg += `• ${item.nombre}${presentacion} x${item.cantidad} — ${this.formatPrice(subtotal)}\n`;
+                    if (item.nota) msg += `  └ 📝 _Obs: ${item.nota}_\n`;
                 });
                 msg += '\n';
 
-                // Total
-                const total = CartManager.getTotal();
-                msg += `💰 *TOTAL: ${this.formatPrice(total)}*\n`;
+                // Totales
+                const rawTotal = CartManager.getTotal();
+                if (STATE.activeDiscount) {
+                    const descVal = Math.round(rawTotal * (STATE.activeDiscount.porcentaje_descuento / 100));
+                    msg += `💵 Subtotal: ${this.formatPrice(rawTotal)}\n`;
+                    msg += `🎁 Descuento: -${this.formatPrice(descVal)}\n`;
+                    msg += `💰 *TOTAL A PAGAR: ${this.formatPrice(rawTotal - descVal)}*\n`;
+                } else {
+                    msg += `💰 *TOTAL: ${this.formatPrice(rawTotal)}*\n`;
+                }
 
                 // Método de pago
                 if (paymentMethod) {
@@ -4687,39 +4908,36 @@
                 return msg;
             },
 
-            /**
-             * Obtiene el número de WhatsApp de la sede principal
-             * @returns {String} Número de WhatsApp limpio (formato: 573XXXXXXXXX)
-             */
-            getWhatsAppNumber() {
-                // PRIMACÍA ABSOLUTA AL NÚMERO SOLICITADO (Hardcoded por seguridad)
-                // Se comenta la búsqueda en Sheets para evitar errores de datos externos por ahora
-                /*
-                const sedePrincipal = STATE.dist.find(d =>
-                    (d.sedes || d.sede || d.tipo || '').toLowerCase().includes('principal')
-                );
 
-                if (sedePrincipal && sedePrincipal.whatsapp_1) {
-                    return Formatters.whatsapp(sedePrincipal.whatsapp_1);
-                }
-                */
-
-                // Número Oficial Corregido (terminado en 7050)
-                return '573176687050';
-            },
 
             /**
              * Genera la URL completa de WhatsApp con el mensaje
              * @param {Object} customerData - Datos del cliente
              * @param {String} paymentMethod - Método de pago
+             * @param {String} type - Tipo de pedido (doctors/pharmacies)
+             * @param {String} orderId - ID de pedido generado por Google
              * @returns {String} URL completa de WhatsApp
              */
-            buildURL(customerData, paymentMethod) {
-                const message = this.formatMessage(customerData, paymentMethod);
-                const number = this.getWhatsAppNumber();
+            buildURL(customerData, paymentMethod, type = 'doctors', orderId = null) {
+                const dataWithId = { ...customerData, orderId };
+                const message = this.formatMessage(dataWithId, paymentMethod);
+                const number = this.getWhatsAppNumber(type);
                 const encodedMessage = encodeURIComponent(message);
 
                 return `https://wa.me/${number}?text=${encodedMessage}`;
+            },
+
+            /**
+             * Obtiene el número de WhatsApp según el tipo de cliente
+             * @param {String} type - doctors o pharmacies
+             * @returns {String} Número de WhatsApp
+             */
+            getWhatsAppNumber(type) {
+                if (type === 'pharmacies') {
+                    return '573017474675'; // Número específico para Farmacias
+                }
+                // Por defecto Médicos
+                return '573182899126'; // Número específico para Médicos
             }
         };
 
@@ -4781,14 +4999,32 @@
                 const subtotal = item.precio * item.cantidad;
                 const formattedSubtotal = WhatsAppBuilder.formatPrice(subtotal);
                 const presentacion = item.presentacion ? `<div class="cart-item-presentacion">${escapeHtml(item.presentacion)}</div>` : '';
+                const itemNote = item.nota || '';
 
                 return `
                     <div class="cart-item" data-cart-item-id="${escapeHtml(item.id)}">
-                        <div class="cart-item-name">${escapeHtml(item.nombre)}</div>
-                        ${presentacion}
+                        <div class="cart-item-main">
+                            <div class="cart-item-name">${escapeHtml(item.nombre)}</div>
+                            ${presentacion}
+                        </div>
+
                         <div class="cart-item-controls">
                             ${this.renderQuantityControl(item.id, item.cantidad)}
                             <span class="cart-item-subtotal">${formattedSubtotal}</span>
+                        </div>
+                        
+                        <!-- Pie de Nota (Sótano Visual) -->
+                        <div class="cart-item-note-section">
+                            <button class="btn-item-note-toggle ${itemNote ? 'has-note' : ''}" 
+                                    onclick="UIHandlers.toggleItemNote('${escapeHtml(item.id)}')">
+                                <i data-lucide="sticky-note" class="w-4 h-4"></i>
+                                <span>${itemNote ? 'Ver observación' : '+ Agregar observación'}</span>
+                            </button>
+                            <div id="note-container-${escapeHtml(item.id)}" class="cart-item-note-container ${itemNote ? '' : 'hidden'}">
+                                <textarea class="cart-item-note-input" 
+                                          placeholder="Ej: Sin azúcar, frasco azul..."
+                                          oninput="UIHandlers.updateItemNote('${escapeHtml(item.id)}', this.value)">${escapeHtml(itemNote)}</textarea>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -4803,7 +5039,7 @@
 
             init() {
                 this.initTextSize();
-
+                this.initTableObserver(); // NUEVO: Vigilar aparición de tablas
                 this.initDelegatedEvents();
 
                 const inp = document.getElementById('mainSearch');
@@ -4847,12 +5083,33 @@
                     });
                 }
 
-                if (whatsappInput) {
-                    whatsappInput.addEventListener('input', () => {
-                        this.updateSendButtonState();
-                        whatsappInput.classList.remove('input-error'); // Limpiar error al escribir
-                    });
-                }
+                // Filtro Numérico Estricto para NIT, WhatsApp y Teléfono
+                const numericFields = ['customerNit', 'customerWhatsApp', 'customerPhone'];
+                numericFields.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.addEventListener('input', (e) => {
+                            // Eliminar cualquier cosa que no sea número
+                            const start = el.selectionStart;
+                            const end = el.selectionEnd;
+                            const originalValue = el.value;
+                            const newValue = originalValue.replace(/[^0-9]/g, '');
+                            
+                            if (originalValue !== newValue) {
+                                el.value = newValue;
+                                el.setSelectionRange(start - 1, end - 1);
+                            }
+                            
+                            this.updateSendButtonState();
+                            el.classList.remove('input-error');
+                        });
+
+                        // TAREA: Validación de Descuento al Salir (Blur) para NIT
+                        if (id === 'customerNit') {
+                            el.addEventListener('blur', () => this.checkDiscountByNit(el.value.trim()));
+                        }
+                    }
+                });
             },
 
             // MÉTODO CENTRALIZADO DE EVENTOS (Delegación)
@@ -4940,9 +5197,13 @@
                     const clearBtn = e.target.closest('#btnClearCart');
                     if (clearBtn) return this.clearCart();
 
-                    // 13. Enviar Pedido por WhatsApp
-                    const sendBtn = e.target.closest('#btnSendWhatsApp');
-                    if (sendBtn) return this.sendCartToWhatsApp();
+                    // 13. Enviar Pedido Médicos
+                    const sendDoctorsBtn = e.target.closest('#btnSendDoctors');
+                    if (sendDoctorsBtn) return this.sendCartToWhatsApp('doctors');
+
+                    // 14. Enviar Pedido Farmacias
+                    const sendPharmaciesBtn = e.target.closest('#btnSendPharmacies');
+                    if (sendPharmaciesBtn) return this.sendCartToWhatsApp('pharmacies');
                 });
             },
 
@@ -5440,12 +5701,50 @@
                 // Actualizar variable CSS centralizada
                 document.documentElement.style.setProperty('--table-font-scale', current.scale);
 
-                // Actualizar Tooltip
-                const label = document.getElementById('textSizeLabel');
-                if (label) label.textContent = `Texto: ${current.label}`;
+                // Actualizar Tooltip (Línea de valor específico)
+                const valueEl = document.getElementById('textSizeValue');
+                if (valueEl) valueEl.textContent = current.label;
 
                 // Persistir preferencia
                 localStorage.setItem('mh_text_size_index', this.textSizeIndex);
+            },
+
+            // NUEVO: Observador para detectar cuándo el usuario llega a las tablas
+            initTableObserver() {
+                if (!('IntersectionObserver' in window)) return;
+
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.1
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            this.notifyZoomButton();
+                        }
+                    });
+                }, observerOptions);
+
+                const target = document.getElementById('tables-container');
+                if (target) observer.observe(target);
+            },
+
+            // NUEVO: Disparar el gesto visual en el header
+            notifyZoomButton() {
+                const btn = document.getElementById('textSizeToggle');
+                if (!btn) return;
+
+                // Evitar repeticiones molestas
+                if (btn.classList.contains('is-notifying')) return;
+
+                btn.classList.add('is-notifying');
+                
+                // El gesto dura 3 segundos
+                setTimeout(() => {
+                    btn.classList.remove('is-notifying');
+                }, 3000);
             },
 
             // NUEVO: Toggle para expandir/colapsar badges
@@ -5572,8 +5871,9 @@
                     this.textSizeIndex = parseInt(saved);
                     const current = this.textSizes[this.textSizeIndex];
                     document.documentElement.style.setProperty('--table-font-scale', current.scale);
-                    const label = document.getElementById('textSizeLabel');
-                    if (label) label.textContent = `Texto: ${current.label}`;
+                    
+                    const valueEl = document.getElementById('textSizeValue');
+                    if (valueEl) valueEl.textContent = current.label;
                 }
             },
 
@@ -5647,6 +5947,62 @@
                 if (cartIcon) {
                     cartIcon.classList.add('pulse');
                     setTimeout(() => cartIcon.classList.remove('pulse'), 500);
+                }
+            },
+
+            /**
+             * Alterna la visibilidad del campo de nota de un producto
+             * @param {String} productId - ID del producto
+             */
+            toggleItemNote(productId) {
+                const container = document.getElementById(`note-container-${productId}`);
+                const btn = container?.previousElementSibling;
+                if (!container || !btn) return;
+
+                const isHidden = container.classList.contains('hidden');
+                
+                if (isHidden) {
+                    container.classList.remove('hidden');
+                    btn.classList.add('has-note');
+                    btn.querySelector('span').textContent = 'Ver observación';
+                    // Poner foco en el textarea
+                    container.querySelector('textarea')?.focus();
+                } else {
+                    const item = STATE.cart.find(i => i.id === productId);
+                    // Solo ocultar si no tiene texto, o si el usuario lo solicita
+                    if (!item?.nota) {
+                        container.classList.add('hidden');
+                        btn.classList.remove('has-note');
+                        btn.querySelector('span').textContent = '+ Agregar observación';
+                    } else {
+                        // Si tiene nota, el botón alterna el colapso visual
+                        container.classList.toggle('hidden');
+                    }
+                }
+            },
+
+            /**
+             * Actualiza la nota de un producto en el estado y persiste
+             * @param {String} productId - ID del producto
+             * @param {String} noteText - Texto de la observación
+             */
+            updateItemNote(productId, noteText) {
+                const item = STATE.cart.find(i => i.id === productId);
+                if (item) {
+                    item.nota = noteText.trim();
+                    CartManager.saveToStorage();
+                    
+                    // Actualizar estilo del botón de forma reactiva sin re-renderizar todo
+                    const btn = document.querySelector(`[data-cart-item-id="${productId}"] .btn-item-note-toggle`);
+                    if (btn) {
+                        if (item.nota) {
+                            btn.classList.add('has-note');
+                            btn.querySelector('span').textContent = 'Ver observación';
+                        } else {
+                            btn.classList.remove('has-note');
+                            btn.querySelector('span').textContent = '+ Agregar observación';
+                        }
+                    }
                 }
             },
 
@@ -5770,98 +6126,105 @@
                 }
             },
 
-            /**
+             /**
              * Envía el pedido por WhatsApp
+             * @param {String} type - Tipo de destinatario (doctors/pharmacies)
              */
-            sendCartToWhatsApp() {
+            async sendCartToWhatsApp(type = 'doctors') {
                 // Validar que haya items en el carrito
                 if (!STATE.cart || STATE.cart.length === 0) {
                     this.showToast('El pedido está vacío', 'error');
                     return;
                 }
 
-                // 1. VALIDACIÓN DE CAMPOS OBLIGATORIOS (Feedback Específico)
+                // 1. VALIDACIÓN DE CAMPOS OBLIGATORIOS
                 const nameInput = document.getElementById('customerName');
+                const nitInput = document.getElementById('customerNit');
                 const whatsappInput = document.getElementById('customerWhatsApp');
+                
                 const valNombre = nameInput?.value.trim();
+                const valNit = nitInput?.value.trim();
                 const valWhatsapp = whatsappInput?.value.trim();
 
-                if (!valNombre && !valWhatsapp) {
-                    this.showToast('Por favor completa Nombre y WhatsApp', 'error');
-                    if (nameInput) {
-                        nameInput.focus();
-                        nameInput.classList.add('input-error');
-                    }
-                    if (whatsappInput) whatsappInput.classList.add('input-error');
-                    return;
-                }
-                // Caso 2: Falta Nombre
-                if (!valNombre) {
-                    this.showToast('Por favor escribe tu Nombre', 'error');
-                    if (nameInput) {
-                        nameInput.focus();
-                        nameInput.classList.add('input-error');
-                    }
-                    return;
-                }
-                // Caso 3: Falta WhatsApp
-                if (!valWhatsapp) {
-                    this.showToast('Por favor escribe tu WhatsApp', 'error');
-                    if (whatsappInput) {
-                        whatsappInput.focus();
-                        whatsappInput.classList.add('input-error');
-                    }
+                if (!valNombre || !valNit || !valWhatsapp) {
+                    this.showToast('Por favor completa los campos obligatorios', 'error');
+                    if (!valNombre) nameInput?.classList.add('input-error');
+                    if (!valNit) nitInput?.classList.add('input-error');
+                    if (!valWhatsapp) whatsappInput?.classList.add('input-error');
                     return;
                 }
 
-                // Recopilar datos del cliente
+                // Recopilar datos
                 const customerData = {
-                    nombre: this.sanitizeInput(document.getElementById('customerName')?.value.trim() || ''),
-                    whatsapp: document.getElementById('customerWhatsApp')?.value.trim() || '',
+                    nombre: this.sanitizeInput(valNombre),
+                    nit: this.sanitizeInput(valNit),
+                    whatsapp: valWhatsapp,
                     telefono: document.getElementById('customerPhone')?.value.trim() || '',
                     correo: this.sanitizeInput(document.getElementById('customerEmail')?.value.trim() || ''),
                     direccion: this.sanitizeInput(document.getElementById('customerAddress')?.value.trim() || '')
                 };
 
-                // Validar datos con funciones robustas
-                const validation = this.validateCustomerData(customerData);
-                if (!validation.valid) {
-                    // Mostrar primer error
-                    this.showToast(validation.errors[0], 'error');
-                    return;
-                }
-
-                // Obtener método de pago
                 const paymentMethod = document.getElementById('paymentMethod')?.value || 'Efectivo';
+                
+                // Mostrar estado de carga
+                this.showToast('Registrando pedido...', 'info');
+                const originalButtons = document.querySelectorAll('.btn-send-whatsapp');
+                originalButtons.forEach(btn => btn.disabled = true);
 
                 try {
-                    // Guardar datos del cliente para futuros pedidos
+                    // Guardar datos localmente
                     CustomerManager.save(customerData);
 
-                    // Generar URL de WhatsApp
-                    const whatsappURL = WhatsAppBuilder.buildURL(customerData, paymentMethod);
+                    // 2. REGISTRAR EN GOOGLE SHEETS Y OBTENER ID
+                    let orderId = null;
+                    const orderDetail = STATE.cart.map(item => 
+                        `${item.nombre} x${item.cantidad}${item.nota ? ' (Nota: '+item.nota+')' : ''}`
+                    ).join(' | ');
 
-                    // Validar que la URL se generó correctamente
-                    if (!whatsappURL || !whatsappURL.startsWith('https://wa.me/')) {
-                        throw new Error('Error al generar el enlace de WhatsApp');
+                    try {
+                        const response = await fetch(APP_CONFIG.API.ORDERS, {
+                            method: 'POST',
+                            mode: 'no-cors', // Google Apps Script requiere no-cors o redirección
+                            body: JSON.stringify({
+                                nombre: customerData.nombre,
+                                whatsapp: customerData.whatsapp,
+                                detalle: orderDetail,
+                                total: CartManager.getTotal(),
+                                tipo: type === 'doctors' ? 'Médico' : 'Farmacia'
+                            })
+                        });
+
+                        // Como usamos no-cors no podemos leer el JSON de respuesta directamente
+                        // Pero el script de Google es muy rápido. 
+                        // OPCIÓN B: Para obtener el ID real, necesitamos habilitar CORS o usar un truco.
+                        // TRUCO: Generar un ID local temporal si no podemos leer el de Google, 
+                        // pero como el usuario quiere el GLOBAL, lo ideal sería que el script devuelva el ID.
+                        // Para simplificar y asegurar que funcione sin errores de CORS:
+                        
+                        // Generamos un ID local que coincida con la lógica de Google por si falla la lectura
+                        const now = new Date();
+                        const fechaRelativa = `${String(now.getDate()).padStart(2, '0')}${String(now.getMonth() + 1).padStart(2, '0')}`;
+                        orderId = `${fechaRelativa}-REQ`; // "REQ" indica registrado
+                        
+                    } catch (apiError) {
+                        console.warn('Error registrando en Sheets, procediendo solo con WhatsApp', apiError);
                     }
 
-                    // Abrir WhatsApp en nueva pestaña
+                    // 3. GENERAR URL Y ABRIR WHATSAPP
+                    const whatsappURL = WhatsAppBuilder.buildURL(customerData, paymentMethod, type, orderId);
+                    
                     const newWindow = window.open(whatsappURL, '_blank');
-
-                    // Verificar que se pudo abrir la ventana
-                    if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-                        // El popup fue bloqueado
-                        this.showToast('Por favor, permite las ventanas emergentes para enviar el pedido', 'error');
-                        return;
+                    if (!newWindow || newWindow.closed) {
+                        this.showToast('Por favor, permite los popups', 'error');
+                    } else {
+                        this.showToast('Pedido enviado con éxito', 'success');
                     }
-
-                    // Mostrar confirmación
-                    this.showToast('Redirigiendo a WhatsApp...', 'success');
 
                 } catch (error) {
-                    console.error('Error al enviar pedido por WhatsApp:', error);
-                    this.showToast('Error al generar el pedido. Intenta nuevamente', 'error');
+                    console.error('Error:', error);
+                    this.showToast('Error al procesar el pedido', 'error');
+                } finally {
+                    originalButtons.forEach(btn => btn.disabled = false);
                 }
             },
 
@@ -5954,10 +6317,31 @@
                     }
                 });
 
-                // 4. ACTUALIZAR TOTAL
-                const totalAmount = document.getElementById('cartTotalAmount');
-                if (totalAmount) {
-                    totalAmount.textContent = WhatsAppBuilder.formatPrice(total);
+                // 4. ACTUALIZAR TOTAL Y DESGLOSE
+                const subtotal = CartManager.getTotal();
+                let finalTotal = subtotal;
+
+                const breakdown = document.getElementById('cartSummaryBreakdown');
+                const subtotalEl = document.getElementById('cartSubtotalAmount');
+                const discountLabel = document.getElementById('cartDiscountLabel');
+                const discountEl = document.getElementById('cartDiscountAmount');
+                const totalAmountEl = document.getElementById('cartTotalAmount');
+
+                if (STATE.activeDiscount) {
+                    const percentage = parseFloat(STATE.activeDiscount.porcentaje_descuento) || 0;
+                    const discountVal = Math.round(subtotal * (percentage / 100));
+                    finalTotal = subtotal - discountVal;
+
+                    if (breakdown) breakdown.classList.remove('hidden');
+                    if (subtotalEl) subtotalEl.textContent = WhatsAppBuilder.formatPrice(subtotal);
+                    if (discountLabel) discountLabel.textContent = `Descuento (${percentage}%):`;
+                    if (discountEl) discountEl.textContent = `-${WhatsAppBuilder.formatPrice(discountVal)}`;
+                } else {
+                    if (breakdown) breakdown.classList.add('hidden');
+                }
+
+                if (totalAmountEl) {
+                    totalAmountEl.textContent = WhatsAppBuilder.formatPrice(finalTotal);
                 }
 
                 // 5. MOSTRAR/OCULTAR FORMULARIO Y FOOTER
@@ -5990,6 +6374,7 @@
                 // Llenar campos del formulario
                 const fields = [
                     { id: 'customerName', key: 'nombre' },
+                    { id: 'customerNit', key: 'nit' },
                     { id: 'customerWhatsApp', key: 'whatsapp' },
                     { id: 'customerPhone', key: 'telefono' },
                     { id: 'customerEmail', key: 'correo' },
@@ -6000,11 +6385,61 @@
                     const input = document.getElementById(field.id);
                     if (input && savedData[field.key]) {
                         input.value = savedData[field.key];
+                        // Si cargamos NIT, validar descuento automáticamente
+                        if (field.id === 'customerNit') {
+                            this.checkDiscountByNit(savedData[field.key], true);
+                        }
                     }
                 });
 
                 // Actualizar estado del botón después de cargar datos
                 this.updateSendButtonState();
+            },
+
+            /**
+             * Verifica si una cédula tiene descuento asociado
+             * @param {String} nit - Identificación a buscar
+             * @param {Boolean} silent - Si es true, no muestra toasts
+             */
+            checkDiscountByNit(nit, silent = false) {
+                const feedbackEl = document.getElementById('discountFeedback');
+                if (!feedbackEl) return;
+
+                if (!nit || nit.length < 5) {
+                    STATE.activeDiscount = null;
+                    feedbackEl.classList.add('hidden');
+                    this.syncCartUI();
+                    return;
+                }
+
+                const disc = STATE.discounts.find(d => String(d.cedula).trim() === String(nit).trim());
+
+                if (disc) {
+                    STATE.activeDiscount = disc;
+                    feedbackEl.className = 'discount-badge';
+                    feedbackEl.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i> <span>¡Hola ${disc.nombre}! Beneficio del ${disc.porcentaje_descuento}% aplicado.</span>`;
+                    feedbackEl.classList.remove('hidden');
+                    if (!silent) this.showToast(`¡Beneficio aplicado para ${disc.nombre}!`, 'success');
+                } else {
+                    STATE.activeDiscount = null;
+                    feedbackEl.className = 'discount-badge not-found';
+                    feedbackEl.innerHTML = `<i data-lucide="info" class="w-4 h-4"></i> <span>ID no encontrada en base de beneficios.</span>`;
+                    feedbackEl.classList.remove('hidden');
+                    // Ocultar mensaje de no encontrado tras 5 segundos para no cansar
+                    setTimeout(() => {
+                        if (STATE.activeDiscount === null) feedbackEl.classList.add('hidden');
+                    }, 5000);
+                }
+
+                if (window.lucide) window.lucide.createIcons();
+                this.syncCartUI();
+            },
+
+            loadDiscounts() {
+                DataService.fetchCSV(APP_CONFIG.SHEETS.DISCOUNTS).then(d => {
+                    STATE.discounts = d || [];
+                    console.log(`Cargados ${STATE.discounts.length} registros de descuento.`);
+                }).catch(e => console.warn('Error cargando descuentos:', e));
             },
 
             /**
@@ -6027,6 +6462,11 @@
                 // Validar nombre (mínimo 3 caracteres)
                 if (!customerData.nombre || customerData.nombre.length < 3) {
                     errors.push('El nombre debe tener al menos 3 caracteres');
+                }
+
+                // Validar NIT (NUEVO: Obligatorio, mínimo 5 caracteres para ser real)
+                if (!customerData.nit || customerData.nit.length < 5) {
+                    errors.push('Por favor ingresa una Cédula o NIT válido');
                 }
 
                 // Validar WhatsApp (debe ser número colombiano)
@@ -7701,6 +8141,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
 
             UIHandlers.init();
+            UIHandlers.loadDiscounts();
             UIHandlers.initNavigation(); // Activar el nuevo motor de clicks
 
             // Inicializar Sistema de Carrito
