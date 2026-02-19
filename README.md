@@ -1,22 +1,26 @@
 # Mundo Homeopático - Catálogo Digital 2026
 
-Este es el repositorio oficial de la lista de precios y catálogo digital de **Mundo Homeopático**. La aplicación es una Single Page Application (SPA) construida con Vanilla JavaScript y CSS moderno, diseñada para ofrecer una experiencia rápida y profesional.
+Este es el repositorio oficial de la lista de precios y catálogo digital de **Mundo Homeopático**. La aplicación es una Single Page Application (SPA) robusta diseñada para ofrecer una experiencia rápida, profesional y optimizada para dispositivos móviles.
 
 ## Características principales
 
-- **Datos Dinámicos**: Sincronización en tiempo real con Google Sheets para precios y preguntas frecuentes (FAQ).
-- **Acceso Profesional**: Sistema de autenticación por contraseña para visualizar precios de farmacia.
-- **Búsqueda Avanzada**: Filtrado instantáneo de productos por nombre o categoría.
-- **Diseño Responsivo**: Optimizado para móviles y escritorio con un enfoque en la legibilidad.
-- **Carga Eficiente**: Uso de imágenes WebP y carga perezosa (Lazy Loading) de videos.
+- **Arquitectura de Archivo Único**: Todo el sistema (HTML, CSS y JS) reside en `index.html` para maximizar la compatibilidad con GitHub Pages y facilitar el mantenimiento.
+- **Datos Dinámicos (CMS via Google Sheets)**: Sincronización en tiempo real de precios, navegación, FAQ, distribuidores y configuración SEO a través de Google Sheets.
+- **Sistema de Carrito Avanzado**: Permite a los usuarios armar pedidos y enviarlos directamente por WhatsApp a la farmacia o a su distribuidor más cercano.
+- **SEO & Schema Markups**: Implementación avanzada de JSON-LD para LocalBusiness, FAQPage, OfferCatalog y VideoObject, maximizando la visibilidad en buscadores.
+- **Diseño Premium**: Interfaz moderna construida con Tailwind CSS y variables CSS semánticas (Design Tokens).
+- **Optimización de Rendimiento**: Carga diferida de recursos, pre-procesamiento de datos desde caché y uso de proxies para garantizar la conectividad.
 
 ## Estructura del Proyecto
 
-- `index.html`: Página principal con la lista de precios.
-- `contacto.html`: Información de sedes, distribuidores y FAQ.
-- `css/`: Estilos personalizados (Variables CSS, Diseño Grid/Flexbox).
-- `js/`: Lógica de la aplicación (DataService, Renderers, UIHandlers).
-- `img/`: Activos visuales y logos de distribuidores.
+- `index.html`: El corazón del proyecto. Contiene la infraestructura, el sistema de diseño, la estructura de interfaz y la lógica de negocio modular.
+- `img/`: Directorio de activos visuales y logos de la marca y distribuidores.
+- `robots.txt` / `sitemap.xml`: Archivos de configuración para indexación en buscadores.
+
+## Despliegue
+
+El proyecto está diseñado para ser servido directamente mediante **GitHub Pages**. Cualquier cambio subido a la rama `main` se verá reflejado automáticamente en la URL pública.
 
 ---
 © 2026 Mundo Homeopático - Todos los derechos reservados.
+
