@@ -1137,24 +1137,60 @@
             cursor: pointer;
         }
 
-        /* Feedback de Descuento */
+        /* Feedback de Descuento - Premium & Visible */
         .discount-badge {
-            display: flex;
+            display: flex !important;
             align-items: center;
-            gap: 6px;
-            margin-top: 6px;
-            padding: 6px 10px;
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--primary-vibrant);
-            border-radius: var(--radius-sm);
-            font-size: 12px;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 10px 14px;
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--primary);
+            border-radius: var(--radius-md);
+            font-size: 14px;
             font-weight: 600;
-            animation: slideIn 0.3s ease-out;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.1);
+            position: relative;
+            z-index: 10;
         }
 
         .discount-badge.not-found {
-            background: rgba(245, 158, 11, 0.1);
-            color: #d97706;
+            background: rgba(245, 158, 11, 0.12);
+            color: #b45309;
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        /* Etiqueta de Stock Dinámica - Centrado & Legibilidad Mejorada */
+        .product-stock-tag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin: 6px 0;
+            padding: 4px 10px;
+            background: rgba(30, 64, 175, 0.08); /* Azul acero muy pálido */
+            color: #1e40af; /* Texto azul acero */
+            border-radius: 6px;
+            font-size: 13.5px; /* Un pelín más grande */
+            font-weight: 600;
+            line-height: 1; /* Centrado vertical optimizado */
+            border: 1px solid rgba(30, 64, 175, 0.2);
+            vertical-align: middle;
+        }
+
+        .cart-item-stock-tag {
+            display: inline-block;
+            margin-top: 4px;
+            padding: 2px 8px;
+            background: rgba(30, 64, 175, 0.05);
+            color: #475569;
+            border-radius: 4px;
+            font-size: 11px; /* Un punto más grande para el carrito también */
+            font-weight: 600;
+            line-height: 1.2;
+            border: 1px solid rgba(30, 64, 175, 0.1);
         }
 
         /* Desglose de Totales con Descuento */
@@ -4640,7 +4676,8 @@
                         presentacion: producto.presentacion,
                         precio: producto.precio,
                         cantidad: 1,
-                        categoria: producto.categoria || ''
+                        categoria: producto.categoria || '',
+                        stock: producto.stock || ''
                     });
                 }
 
@@ -4882,7 +4919,8 @@
                 STATE.cart.forEach(item => {
                     const subtotal = item.precio * item.cantidad;
                     const presentacion = item.presentacion ? ` (${item.presentacion})` : '';
-                    msg += `• ${item.nombre}${presentacion} x${item.cantidad} — ${this.formatPrice(subtotal)}\n`;
+                    const stockInfo = item.stock ? ` [${item.stock}]` : '';
+                    msg += `• ${item.nombre}${presentacion}${stockInfo} x${item.cantidad} — ${this.formatPrice(subtotal)}\n`;
                     if (item.nota) msg += `  └ 📝 _Obs: ${item.nota}_\n`;
                 });
                 msg += '\n';
@@ -5005,6 +5043,7 @@
                     <div class="cart-item" data-cart-item-id="${escapeHtml(item.id)}">
                         <div class="cart-item-main">
                             <div class="cart-item-name">${escapeHtml(item.nombre)}</div>
+                            ${item.stock ? `<div class="cart-item-stock-tag">${escapeHtml(item.stock)}</div>` : ''}
                             ${presentacion}
                         </div>
 
@@ -5104,12 +5143,22 @@
                             el.classList.remove('input-error');
                         });
 
-                        // TAREA: Validación de Descuento al Salir (Blur) para NIT
+                        // TAREA: Validación de Descuento
                         if (id === 'customerNit') {
+                            // 1. Al escribir (Feedback instantáneo)
+                            el.addEventListener('input', () => {
+                                if (el.value.trim().length >= 5) {
+                                    this.checkDiscountByNit(el.value.trim(), true);
+                                }
+                            });
+                            // 2. Al salir (Validación final con Toast/Avisos)
                             el.addEventListener('blur', () => this.checkDiscountByNit(el.value.trim()));
                         }
                     }
                 });
+
+                // Cargar datos persistentes al iniciar (Solo una vez)
+                this.loadCustomerData();
             },
 
             // MÉTODO CENTRALIZADO DE EVENTOS (Delegación)
@@ -5174,7 +5223,8 @@
                             presentacion: addBtn.dataset.productPresentation,
                             // CORRECCIÓN: Eliminar puntos de miles antes de parsear
                             precio: parseFloat(String(addBtn.dataset.productPrice).replace(/\./g, '').replace(',', '.')) || 0,
-                            categoria: addBtn.dataset.productCategory
+                            categoria: addBtn.dataset.productCategory,
+                            stock: addBtn.dataset.productStock
                         };
                         return this.addToCart(productData);
                     }
@@ -6292,7 +6342,8 @@
                             const productCell = row.querySelector('.product-name');
                             if (productCell) {
                                 const productName = productCell.querySelector('.font-bold')?.textContent.trim() || '';
-                                const presentation = productCell.querySelector('.text-slate-500')?.textContent.trim() || '';
+                                const presentation = productCell.querySelector('.text-slate-600')?.textContent.trim() || '';
+                                const stockValue = row.dataset.productStock || '';
                                 const priceCell = row.querySelector('td[data-label]');
                                 const priceText = priceCell?.textContent.trim() || '0';
                                 // CORRECCIÓN: Eliminar puntos explícitamente para evitar truncado
@@ -6307,7 +6358,8 @@
                                                 data-product-name="${escapeHtml(productName)}"
                                                 data-product-presentation="${escapeHtml(presentation)}"
                                                 data-product-price="${price}"
-                                                data-product-category="">
+                                                data-product-category=""
+                                                data-product-stock="${escapeHtml(stockValue)}">
                                             +
                                         </button>
                                     `;
@@ -6327,7 +6379,7 @@
                 const discountEl = document.getElementById('cartDiscountAmount');
                 const totalAmountEl = document.getElementById('cartTotalAmount');
 
-                if (STATE.activeDiscount) {
+                if (STATE.activeDiscount && (parseFloat(STATE.activeDiscount.porcentaje_descuento) || 0) > 0) {
                     const percentage = parseFloat(STATE.activeDiscount.porcentaje_descuento) || 0;
                     const discountVal = Math.round(subtotal * (percentage / 100));
                     finalTotal = subtotal - discountVal;
@@ -6351,9 +6403,6 @@
                 if (STATE.cart.length > 0) {
                     if (form) form.classList.remove('hidden');
                     if (footer) footer.classList.remove('hidden');
-
-                    // Cargar datos del cliente guardados (si existen)
-                    this.loadCustomerData();
                 } else {
                     if (form) form.classList.add('hidden');
                     if (footer) footer.classList.add('hidden');
@@ -6398,37 +6447,64 @@
 
             /**
              * Verifica si una cédula tiene descuento asociado
-             * @param {String} nit - Identificación a buscar
-             * @param {Boolean} silent - Si es true, no muestra toasts
              */
             checkDiscountByNit(nit, silent = false) {
                 const feedbackEl = document.getElementById('discountFeedback');
                 if (!feedbackEl) return;
 
-                if (!nit || nit.length < 5) {
+                if (!nit || String(nit).trim().length < 3) {
                     STATE.activeDiscount = null;
                     feedbackEl.classList.add('hidden');
+                    feedbackEl.innerHTML = ''; // Limpiar para evitar fantasmas
                     this.syncCartUI();
                     return;
                 }
 
-                const disc = STATE.discounts.find(d => String(d.cedula).trim() === String(nit).trim());
+                // Normalización Superior: Maneja NOTACIÓN CIENTÍFICA y caracteres especiales
+                const ultraNormalize = (val) => {
+                    let s = String(val || '').toLowerCase().trim();
+                    // Si parece ser notación científica (ej: 1.01e+09), convertir a número y luego a string limpio
+                    if (s.includes('e+') || s.includes('e-')) {
+                        const num = Number(s);
+                        if (!isNaN(num)) s = BigInt(Math.floor(num)).toString();
+                    }
+                    return s.replace(/[^a-z0-9]/g, '');
+                };
 
-                if (disc) {
+                const searchNit = ultraNormalize(nit);
+                const disc = STATE.discounts.find(d => ultraNormalize(d.cedula) === searchNit);
+
+                console.log(`Buscando descuento para: ${nit} (norm: ${searchNit}). Encontrado: ${disc ? 'SÍ' : 'NO'}`);
+
+                if (disc && (parseFloat(disc.porcentaje_descuento) || 0) > 0) {
                     STATE.activeDiscount = disc;
+                    const pct = disc.porcentaje_descuento;
+                    
                     feedbackEl.className = 'discount-badge';
-                    feedbackEl.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i> <span>¡Hola ${disc.nombre}! Beneficio del ${disc.porcentaje_descuento}% aplicado.</span>`;
+                    feedbackEl.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-600"></i> 
+                            <span>¡Hola <strong>${disc.nombre}</strong>! Beneficio del <strong>${pct}%</strong> aplicado.</span>
+                        </div>
+                    `;
                     feedbackEl.classList.remove('hidden');
-                    if (!silent) this.showToast(`¡Beneficio aplicado para ${disc.nombre}!`, 'success');
+                    if (!silent) this.showToast(`¡Beneficio aplicado!`, 'success');
                 } else {
                     STATE.activeDiscount = null;
-                    feedbackEl.className = 'discount-badge not-found';
-                    feedbackEl.innerHTML = `<i data-lucide="info" class="w-4 h-4"></i> <span>ID no encontrada en base de beneficios.</span>`;
-                    feedbackEl.classList.remove('hidden');
-                    // Ocultar mensaje de no encontrado tras 5 segundos para no cansar
-                    setTimeout(() => {
-                        if (STATE.activeDiscount === null) feedbackEl.classList.add('hidden');
-                    }, 5000);
+                    if (disc) {
+                        feedbackEl.classList.add('hidden');
+                    } else if (nit.length >= 3) { 
+                        feedbackEl.className = 'discount-badge not-found';
+                        feedbackEl.innerHTML = `
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="info" class="w-4 h-4"></i> 
+                                <span>ID no registrada para beneficios especiales.</span>
+                            </div>
+                        `;
+                        feedbackEl.classList.remove('hidden');
+                    } else {
+                        feedbackEl.classList.add('hidden');
+                    }
                 }
 
                 if (window.lucide) window.lucide.createIcons();
@@ -6437,8 +6513,38 @@
 
             loadDiscounts() {
                 DataService.fetchCSV(APP_CONFIG.SHEETS.DISCOUNTS).then(d => {
-                    STATE.discounts = d || [];
+                    if (!d || !d.length) {
+                        STATE.discounts = [];
+                        return;
+                    }
+
+                    // Normalización Inteligente de Columnas (Ultra-Fuzzy para CMS)
+                    STATE.discounts = d.map(row => {
+                        const keys = Object.keys(row);
+                        // Búsqueda inteligente: cualquier columna que CONTENGA palabras clave
+                        const findKey = (keywords) => keys.find(k => {
+                            const clean = k.toLowerCase().replace(/_/g, ' ').trim();
+                            return keywords.some(kw => clean.includes(kw));
+                        });
+
+                        const idKey = findKey(['cedula', 'nit', 'id', 'documento', 'identificacion']) || keys[0];
+                        const nameKey = findKey(['nombre', 'paciente', 'cliente', 'usuario']) || keys[1];
+                        const pctKey = findKey(['porcentaje', 'descuento', 'beneficio', 'pct']) || keys[2];
+
+                        return {
+                            cedula: row[idKey],
+                            nombre: row[nameKey],
+                            porcentaje_descuento: parseFloat(String(row[pctKey] || '0').replace('%', '').replace(',', '.')) || 0
+                        };
+                    });
+
                     console.log(`Cargados ${STATE.discounts.length} registros de descuento.`);
+                    
+                    // Si ya hay un NIT en el input, re-validar ahora que tenemos los datos
+                    const nitInput = document.getElementById('customerNit');
+                    if (nitInput && nitInput.value.trim().length >= 3) {
+                        this.checkDiscountByNit(nitInput.value.trim(), true);
+                    }
                 }).catch(e => console.warn('Error cargando descuentos:', e));
             },
 
@@ -7608,9 +7714,10 @@
                     const productId = `${(p.producto || 'producto').toLowerCase().replace(/[^a-z0-9]/g, '_')}_${(p.presentacion || 'std').toLowerCase().replace(/[^a-z0-9]/g, '_')}`;
 
                     return `
-                                <tr class="hover:bg-surface-muted transition-colors" data-product-id="${escapeHtml(productId)}">
+                                <tr class="hover:bg-surface-muted transition-colors" data-product-id="${escapeHtml(productId)}" data-product-stock="${escapeHtml(p.stock || '')}">
                                     <td class="product-name align-middle">
                                         <div class="font-bold text-slate-800">${this.processBadgesInline(p.producto || '')}</div>
+                                        ${p.stock ? `<div class="product-stock-tag"><i data-lucide="clock" class="w-3.5 h-3.5"></i> ${escapeHtml(p.stock)}</div>` : ''}
                                         <div class="text-slate-600 font-medium mt-0.5">${this.processBadgesInline(p.presentacion || '')}</div>
                                     </td>
                                     <td class="text-right font-bold text-brand-vibrant align-middle" data-label="${escapeHtml(headerFarm)}">${this.formatPrice(p.precio_farmacia)}</td>
@@ -7623,7 +7730,8 @@
                                                 data-product-name="${escapeHtml(p.producto || '')}"
                                                 data-product-presentation="${escapeHtml(p.presentacion || '')}"
                                                 data-product-price="${precioFarmacia}"
-                                                data-product-category="${escapeHtml(p.nivel_1 || '')}">
+                                                data-product-category="${escapeHtml(p.nivel_1 || '')}"
+                                                data-product-stock="${escapeHtml(p.stock || '')}">
                                             +
                                         </button>` : ''}
                                     </td>
